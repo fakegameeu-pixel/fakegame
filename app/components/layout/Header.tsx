@@ -1,9 +1,29 @@
 "use client";
 
-import { I18nProvider, useI18n } from "../../i18n";
-import { LanguageSwitcher } from "../LanguageSwitcher";
+import { useI18n } from "../../lib/i18n";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { Button } from "../ui/button";
 
-function HeaderContent() {
+type HeaderProps = {
+  onReserve: () => void;
+};
+
+export function Header({ onReserve }: HeaderProps) {
+  const { t } = useI18n();
+
+  return (
+    <header className="siteHeader">
+      <div className="heroTools siteHeaderTools">
+        <Button className="siteHeaderReserve" onClick={onReserve}>
+          {t.hero.cta}
+        </Button>
+        <LanguageSwitcher />
+      </div>
+    </header>
+  );
+}
+
+function PrivacyHeaderContent() {
   const { t } = useI18n();
 
   return (
@@ -21,10 +41,6 @@ function HeaderContent() {
   );
 }
 
-export function Header() {
-  return (
-    <I18nProvider>
-      <HeaderContent />
-    </I18nProvider>
-  );
+export function PrivacyHeader() {
+  return <PrivacyHeaderContent />;
 }

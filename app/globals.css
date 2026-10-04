@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700&family=Marck+Script&display=swap");
+@import "tailwindcss";
 
 :root {
   --wine: #5c101b;
@@ -416,6 +416,14 @@ button {
   align-items: center;
   gap: 17px;
 }
+.siteHeader {
+  position: absolute;
+  z-index: 4;
+  inset: 0 0 auto;
+}
+.siteHeaderTools {
+  z-index: 1;
+}
 .languageSwitcher select {
   appearance: none;
   width: 48px;
@@ -450,29 +458,6 @@ button {
   height: 1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
-}
-.headerReserve {
-  width: 190px;
-  height: 48px;
-  border: 0;
-  border-radius: 999px;
-  background: #ee9e9e;
-  padding: 0 14px;
-  color: #53101a;
-  font:
-    700 10px Manrope,
-    sans-serif;
-  text-align: center;
-  text-transform: none;
-  letter-spacing: 0.02em;
-  box-shadow: none;
-  transition:
-    background 0.2s,
-    transform 0.2s;
-}
-.headerReserve:hover {
-  background: #ffc1bb;
-  transform: translateY(-1px);
 }
 .wrap {
   width: min(1120px, calc(100% - 48px));
@@ -797,6 +782,12 @@ button {
   display: grid;
   place-items: center;
   height: 61px;
+}
+.perkIcon img {
+  display: block;
+  width: 65px;
+  height: 54px;
+  object-fit: contain;
 }
 .perkIcon svg {
   width: 65px;
@@ -1243,13 +1234,19 @@ footer {
     right: 16px;
     gap: 6px;
   }
+  .siteHeaderReserve {
+    height: 34px;
+    padding: 0 12px;
+    font-size: 11px;
+  }
   .languageSwitcher select {
-    width: 79px;
+    width: 49px;
     height: 38px;
     padding: 0 27px 0 9px;
     font-size: 8px;
   }
   .headerReserve {
+    width: clamp(104px, 42vw, 160px);
     height: 38px;
     padding: 0 8px;
     font-size: 7px;
@@ -1257,4 +1254,191 @@ footer {
   .headerReserve span {
     display: none;
   }
+}
+
+/* Compact phones (320–390 px): keep the hero copy inside the viewport. */
+@media (max-width: 390px) {
+  .wrap {
+    width: calc(100% - 28px);
+  }
+  .hero {
+    min-height: 660px !important;
+    background-position: 60% center;
+  }
+  .hero h1 {
+    max-width: 100%;
+    font-size: clamp(52px, 18vw, 70px);
+    line-height: 0.76;
+  }
+  .hero h1 em {
+    font-size: clamp(58px, 20vw, 74px);
+  }
+  .heroSubtitle {
+    font-size: 9px;
+    letter-spacing: 0.17em;
+  }
+  .heroRule {
+    width: 100%;
+  }
+  .heroNote {
+    left: 20px;
+    width: calc(100% - 40px);
+    padding: 20px 20px 17px;
+  }
+  .heroNote p {
+    font-size: 18px;
+  }
+  .heroNote strong {
+    font-size: 31px;
+  }
+}
+
+/* Privacy policy — a calm editorial layout matching the invitation design. */
+.privacyPage {
+  position: relative;
+  padding: 0 24px 88px;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 12% 24%, rgba(184, 86, 98, 0.12), transparent 27rem),
+    radial-gradient(circle at 88% 12%, rgba(236, 190, 170, 0.45), transparent 30rem),
+    #fff8f3;
+}
+.privacyPage::before,
+.privacyPage::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  width: 230px;
+  height: 230px;
+  border: 1px solid rgba(141, 31, 47, 0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.privacyPage::before { top: 22%; left: -150px; }
+.privacyPage::after { right: -145px; bottom: 10%; }
+.privacyHeader {
+  width: min(1200px, 100%);
+  padding: 27px 0 46px;
+}
+.privacyBrand {
+  font-size: 32px;
+  letter-spacing: -0.025em;
+}
+.privacyTools { gap: 9px; }
+.privacyReserve {
+  min-width: 154px;
+  height: 42px;
+  padding: 0 18px;
+  border: 1px solid rgba(92, 16, 27, 0.25);
+  color: #6e1826;
+  font: 700 9px/1 Manrope, sans-serif;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  transition: 180ms ease;
+}
+.privacyReserve:hover { background: #6e1826; color: #fffaf6; }
+.privacyTools .languageSwitcher select {
+  height: 42px;
+  width: 43px;
+  font-size: 10px;
+}
+.privacyCard {
+  width: min(1040px, 100%);
+  padding: clamp(36px, 6vw, 74px);
+  border: 1px solid rgba(120, 43, 52, 0.1);
+  background: rgba(255, 253, 249, 0.94);
+  box-shadow: 0 26px 75px rgba(79, 18, 29, 0.13);
+}
+.privacyIntro { max-width: 730px; }
+.privacyBack {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 54px;
+  color: #812637;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.privacyBack span { font-size: 18px; font-weight: 400; transition: transform 180ms ease; }
+.privacyBack:hover { text-decoration: none; }
+.privacyBack:hover span { transform: translateX(-4px); }
+.privacyCard .eyebrow {
+  margin-bottom: 16px;
+  color: #9a3443;
+  font-size: 9px;
+}
+.privacyCard h1 {
+  max-width: 760px;
+  font-size: clamp(48px, 6.1vw, 80px);
+  line-height: 0.88;
+  letter-spacing: -0.052em;
+}
+.privacyLead {
+  max-width: 585px;
+  margin: 27px 0 0 !important;
+  color: #765157 !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+}
+.privacyUpdated {
+  display: inline-flex;
+  margin: 25px 0 0;
+  padding: 8px 12px;
+  border-radius: 100px;
+  background: #faece6;
+  color: #845d60;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.privacyContent {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: clamp(38px, 7vw, 86px);
+  margin-top: 66px;
+  padding-top: 34px;
+  border-top: 1px solid #ead8d2;
+}
+.privacyAside {
+  align-self: start;
+  padding: 18px 18px 20px;
+  border-left: 2px solid #a83443;
+  background: #fff5f0;
+  color: #76565a;
+}
+.privacyAside span {
+  color: #8f2738;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.privacyAside p { margin: 12px 0 15px; font-size: 11px; line-height: 1.65; }
+.privacyAside a { color: #8f2738; font-size: 10px; font-weight: 700; text-decoration: none; }
+.privacySections { max-width: 620px; }
+.privacyCard section { margin: 0 0 42px; }
+.privacyCard section:last-child { margin-bottom: 0; }
+.privacyCard h2 {
+  margin-bottom: 12px;
+  color: #761826;
+  font-size: 31px;
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+}
+.privacyCard p { color: #62494d; font-size: 14px; line-height: 1.85; }
+.privacyCard section a { font-weight: 700; text-underline-offset: 3px; }
+@media (max-width: 700px) {
+  .privacyPage { padding: 0 16px 48px; }
+  .privacyHeader { padding: 18px 0 31px; }
+  .privacyBrand { font-size: 27px; }
+  .privacyReserve { display: none; }
+  .privacyCard { padding: 30px 24px 38px; }
+  .privacyBack { margin-bottom: 38px; }
+  .privacyCard h1 { font-size: clamp(43px, 13vw, 57px); }
+  .privacyLead { font-size: 13px !important; }
+  .privacyContent { grid-template-columns: 1fr; gap: 34px; margin-top: 43px; }
+  .privacyAside { max-width: 360px; }
+  .privacyCard h2 { font-size: 28px; }
+  .privacyCard section { margin-bottom: 34px; }
 }

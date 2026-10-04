@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { Details } from "./components/Details";
 import { Footer } from "./components/layout/Footer";
+import { Header } from "./components/layout/Header";
 import { Hero } from "./components/Hero";
 import { Introduction } from "./components/Introduction";
 import { InvitationModal } from "./components/InvitationModal";
 import { Perks } from "./components/Perks";
 import { PhotoStrip } from "./components/PhotoStrip";
 import { Story } from "./components/Story";
-import { I18nProvider } from "./i18n";
+import { I18nProvider } from "./lib/i18n";
 
 export default function Home() {
   return (
@@ -24,7 +25,8 @@ function WeddingLanding() {
 
   return (
     <main>
-      <Hero onReserve={() => setIsInvitationOpen(true)} />
+      <Header onReserve={() => setIsInvitationOpen(true)} />
+      <Hero />
       <Introduction />
       <Perks />
       <PhotoStrip />

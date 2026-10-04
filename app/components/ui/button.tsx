@@ -6,7 +6,7 @@ import { Slot } from "@radix-ui/react-slot";
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center",
-    "whitespace-nowrap rounded-full",
+    "max-w-full rounded-full text-center leading-tight",
     "font-semibold",
     "transition-all duration-200",
     "focus-visible:outline-none",
@@ -52,10 +52,10 @@ const buttonVariants = cva(
       },
 
       size: {
-        default: "h-12 px-6 text-base",
-        sm: "h-10 px-5 text-sm",
-        lg: "h-14 px-8 text-lg",
-        icon: "h-12 w-12 p-0",
+        default: "h-11 px-4 text-sm sm:h-12 sm:px-6 sm:text-base",
+        sm: "h-9 px-3 text-xs sm:h-10 sm:px-5 sm:text-sm",
+        lg: "h-12 px-5 text-base sm:h-14 sm:px-8 sm:text-lg",
+        icon: "h-11 w-11 p-0 sm:h-12 sm:w-12",
       },
     },
 

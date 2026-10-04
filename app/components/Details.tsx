@@ -1,5 +1,5 @@
 "use client";
-import { useI18n } from "../i18n";
+import { useI18n } from "../lib/i18n";
 type DetailsProps = { onReserve: () => void };
 function DetailIcon({ type }: { type: "date" | "place" | "guests" | "price" }) {
   if (type === "date")

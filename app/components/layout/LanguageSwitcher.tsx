@@ -1,6 +1,6 @@
 "use client";
 
-import { Locale, useI18n } from "../i18n";
+import { Locale, useI18n } from "../../lib/i18n";
 
 const languages: { value: Locale; label: string }[] = [
   { value: "lv", label: "LV" },

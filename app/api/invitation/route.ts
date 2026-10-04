@@ -37,37 +37,50 @@ function escapeHtml(value: string) {
 }
 
 function emailLayout(content: string) {
-  return `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;padding:0;background:#fff5ee;color:#4e0e18"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#fff5ee"><tr><td style="padding:40px 16px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="max-width:600px;background:#ffffff;border:1px solid #e5c0b7"><tr><td style="height:8px;background:#a12535;font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:38px 32px 20px;text-align:center"><p style="margin:0;color:#a12535;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase">♡ Fake Wedding ♡</p><div style="width:54px;border-top:1px solid #d9aaa0;margin:18px auto 0"></div></td></tr>${content}<tr><td style="padding:24px 32px 30px;text-align:center;background:#4e0e18"><p style="margin:0;color:#e4b5a7;font-family:Arial,sans-serif;font-size:10px;letter-spacing:1.6px;text-transform:uppercase">Fake Wedding</p></td></tr></table></td></tr></table></body></html>`;
+  return `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;padding:0;background:#fff5ee;color:#4e0e18"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#fff5ee"><tr><td style="padding:40px 16px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" align="center" style="max-width:600px;background:#ffffff;border:1px solid #e5c0b7"><tr><td style="height:8px;background:#a12535;font-size:0;line-height:0">&nbsp;</td></tr><tr><td style="padding:38px 32px 20px;text-align:center"><p style="margin:0;color:#a12535;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase">♡ Fake Wedding ♡</p><div style="width:54px;border-top:1px solid #d9aaa0;margin:18px auto 0"></div></td></tr>${content}<tr><td style="padding:24px 32px 30px;text-align:center;background:#4e0e18"><a href="https://www.instagram.com/fakeweddingeu?stkn=MTUzajFnb3ZydnN2ZA%3D%3D&amp;utm_source=qr" target="_blank" rel="noreferrer" aria-label="Instagram Fake Wedding" style="display:inline-block;width:30px;height:30px;text-decoration:none"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="#e4b5a7" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="#e4b5a7" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="#e4b5a7"/></svg></a><p style="margin:12px 0 0;color:#e4b5a7;font-family:Arial,sans-serif;font-size:10px;letter-spacing:1.6px;text-transform:uppercase">Fake Wedding</p></td></tr></table></td></tr></table></body></html>`;
 }
 
 function confirmationEmail(name: string, locale: Locale) {
   const copies: Record<
     Locale,
-    { greeting: string; heading: string; body: string; closing: string }
+    {
+      greeting: string;
+      heading: string;
+      body: string;
+      ticketText: string;
+      ticketLabel: string;
+      closing: string;
+    }
   > = {
     lv: {
       greeting: "Sveiki",
       heading: "Paldies par interesi!",
-      body: "Mēs saņēmām tavu pieteikumu uz Mākslīgajām kāzām. Drīzumā sazināsimies ar nākamo informāciju.",
+      body: "Tava biļetes iegādes saite ir zemāk.",
+      ticketText: "Iegādājoties biļeti, tu sniedz ieguldījumu jaunlaulāto pirmajā ģimenes budžetā.",
+      ticketLabel: "Iegādāties biļeti",
       closing: "Līdz tikšanās reizei!",
     },
     ru: {
       greeting: "Здравствуйте",
       heading: "Спасибо за интерес!",
-      body: "Мы получили вашу заявку на Фейковую свадьбу. Скоро свяжемся с дальнейшими деталями.",
+      body: "Ссылка на покупку билета уже ждёт вас ниже.",
+      ticketText: "Купив билет, вы вносите вклад в первый семейный бюджет молодых.",
+      ticketLabel: "Купить билет",
       closing: "До встречи!",
     },
     en: {
       greeting: "Hello",
       heading: "Thank you for your interest!",
-      body: "We received your request for the Fake Wedding. We will be in touch with the next details soon.",
+      body: "Your ticket purchase link is below.",
+      ticketText: "By buying a ticket, you contribute to the newlyweds’ first family budget.",
+      ticketLabel: "Buy a ticket",
       closing: "See you soon!",
     },
   };
   const copy = copies[locale];
 
   return emailLayout(
-    `<tr><td style="padding:0 40px 40px;text-align:center"><p style="margin:0 0 14px;color:#87605d;font-family:Arial,sans-serif;font-size:15px;line-height:1.6">${copy.greeting}, ${escapeHtml(name)}!</p><h1 style="margin:0 0 18px;color:#7a1d2b;font-family:Georgia,'Times New Roman',serif;font-size:38px;font-weight:500;line-height:1.1">${copy.heading}</h1><p style="margin:0;color:#704b4a;font-family:Arial,sans-serif;font-size:16px;line-height:1.7">${copy.body}</p><p style="margin:27px 0 0;color:#a12535;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-style:italic">${copy.closing}</p></td></tr>`,
+    `<tr><td style="padding:0 40px 40px;text-align:center"><p style="margin:0 0 14px;color:#87605d;font-family:Arial,sans-serif;font-size:15px;line-height:1.6">${copy.greeting}, ${escapeHtml(name)}!</p><h1 style="margin:0 0 18px;color:#7a1d2b;font-family:Georgia,'Times New Roman',serif;font-size:38px;font-weight:500;line-height:1.1">${copy.heading}</h1><p style="margin:0;color:#704b4a;font-family:Arial,sans-serif;font-size:16px;line-height:1.7">${copy.body}</p><p style="margin:18px 0 22px;color:#704b4a;font-family:Arial,sans-serif;font-size:16px;line-height:1.7">${copy.ticketText}</p><a href="https://shopkin.eu/product/fake-wedding-invitation/" style="display:inline-block;padding:14px 24px;background:#a12535;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.7px;text-decoration:none;text-transform:uppercase">${copy.ticketLabel}</a><p style="margin:27px 0 0;color:#a12535;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-style:italic">${copy.closing}</p></td></tr>`,
   );
 }
 

@@ -1,22 +1,12 @@
 "use client";
 
-import { useI18n } from "../i18n";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { Button } from "./ui/button";
+import { useI18n } from "../lib/i18n";
 
-type HeroProps = { onReserve: () => void };
-
-export function Hero({ onReserve }: HeroProps) {
+export function Hero() {
   const { t } = useI18n();
   return (
     <section className="hero" id="top">
       <div className="heroShade" />
-      <div className="heroTools">
-        <Button onClick={onReserve}>
-          {t.hero.cta}
-        </Button>
-        <LanguageSwitcher />
-      </div>
       <div className="heroContent wrap">
         <div className="rings" aria-hidden="true">
           <svg viewBox="0 0 106 84">
