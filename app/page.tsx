@@ -1,5 +1,6 @@
-import { permanentRedirect } from "next/navigation";
+import { WeddingLanding } from "./components/WeddingLanding";
+import { I18nProvider } from "./lib/i18n";
 
 export default function Home() {
-  permanentRedirect("/lv");
+  return <I18nProvider><WeddingLanding /></I18nProvider>;
 }

@@ -3,7 +3,7 @@
 import { useI18n } from "../../lib/i18n";
 
 export function Footer() {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   return (
     <footer className="footer">
       <div className="footerCard">
@@ -18,7 +18,7 @@ export function Footer() {
           <a href="tel:+37125172252">+371 25172252</a>
         </div>
       </div>
-      <a className="privacyLink" href={`/${locale}/privacy-policy`}>
+      <a className="privacyLink" href="/privacy-policy">
         {t.footer.privacy}
       </a>
     </footer>
