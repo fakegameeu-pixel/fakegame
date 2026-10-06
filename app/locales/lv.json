@@ -4,6 +4,7 @@
   "intro": "Varbūt tieši šeit\natradīsi savu mīlestību",
   "perks": ["Teātra\nspēle", "Iejūties\nlomā", "Jaunas\npažīšanās"],
   "story": { "eyebrow": "Ne tikai ballīte", "title": "Vienas kāzas.", "script": "Daudz stāstu.", "text": "Tu saņemsi ielūgumu, lomu un iemeslu saposties. Pārējais notiks pats — vakariņās, mūzikā un sarunās līdz vēlai naktij." },
+  "seo": { "heading": "Mākslīgās kāzas — neparasts veids, kā pavadīt laiku Rīgā", "description": "Šis ir teatralizēts lomu spēles pasākums pieaugušajiem: iepazīsties, iejūties lomā, sarunājies un pavadi īpašu vakaru Rīgā. Pasākums piemērots tiem, kuri meklē jaunas iepazīšanās, interesantas aktivitātes un neparastu ballīti." },
   "details": { "eyebrow": "Saglabā datumu", "date": "datums", "place": "vieta", "guests": "viesu skaits", "price": "no personas", "reserve": "Rezervēt vietu", "city": "Rīga", "limited": "Ierobežots" },
   "footer": { "contact": "Saziņa un jautājumi", "privacy": "Privātuma politika" },
   "modal": { "eyebrow": "Tavs ielūgums", "title": "Atstāj kontaktus", "text": "Nosūtīsim tev slepeno kāzu detaļas.", "name": "Tavs vārds", "email": "E-pasts", "phone": "Tālrunis", "consentStart": "Piekrītu", "policyLink": "personas datu apstrādes politikai", "submit": "Saņemt ielūgumu", "sending": "Sūta...", "error": "Neizdevās nosūtīt. Lūdzu, mēģini vēlreiz.", "success": "Tiksimies kāzās!", "successText": "Biļetes iegādes saite ir nosūtīta uz tavu e-pastu." },

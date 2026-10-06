@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useI18n } from "../lib/i18n";
 
 export function PrivacyPolicyContent() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { privacy } = t;
 
   return (
     <article className="privacyCard">
       <header className="privacyIntro">
-        <Link className="privacyBack" href="/">
+        <Link className="privacyBack" href={`/${locale}`}>
           <span aria-hidden="true">←</span> {privacy.back}
         </Link>
         <p className="eyebrow dark">{privacy.eyebrow}</p>

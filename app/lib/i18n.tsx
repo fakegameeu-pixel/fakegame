@@ -13,16 +13,16 @@ export type Locale = "lv" | "ru" | "en";
 
 const pageMetadata: Record<Locale, { title: string; description: string }> = {
   lv: {
-    title: "Mākslīgās kāzas — Rīga",
-    description: "Teatralizēts iepazīšanās pasākums tiem, kuri ir gatavi skaistam stāstam.",
+    title: "Mākslīgās kāzas Rīgā | Teātra spēle un jaunas iepazīšanās",
+    description: "Mākslīgās kāzas Rīgā — teatrāla lomu spēle, neparasts vakars un jaunas iepazīšanās.",
   },
   ru: {
-    title: "Фейковая свадьба — Рига",
-    description: "Театральное знакомство для тех, кто готов к красивой истории.",
+    title: "Фейковая свадьба в Риге | Театральная игра и новые знакомства",
+    description: "Фейковая свадьба в Риге — театральная ролевая игра, необычная вечеринка и новые знакомства.",
   },
   en: {
-    title: "Fake Wedding — Riga",
-    description: "A theatrical social event for people ready for a beautiful story.",
+    title: "Fake Wedding Riga | A theatrical game and new connections",
+    description: "Fake Wedding Riga is a theatrical role-playing social event for new connections and a memorable night out.",
   },
 };
 
@@ -32,25 +32,15 @@ const I18nContext = createContext<{
   t: Translation;
 } | null>(null);
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>("lv");
-  useEffect(() => {
-    const saved = window.localStorage.getItem(
-      "fakewedding-locale",
-    ) as Locale | null;
-    if (saved && saved in translations) {
-      setLocale(saved);
-      return;
-    }
-    const browser = navigator.language.toLowerCase();
-    setLocale(
-      browser.startsWith("ru") ? "ru" : browser.startsWith("en") ? "en" : "lv",
-    );
-  }, []);
-  const selectLocale = (next: Locale) => {
-    window.localStorage.setItem("fakewedding-locale", next);
-    setLocale(next);
-  };
+export function I18nProvider({
+  children,
+  initialLocale = "lv",
+}: {
+  children: ReactNode;
+  initialLocale?: Locale;
+}) {
+  const [locale, setLocale] = useState<Locale>(initialLocale);
+  const selectLocale = (next: Locale) => setLocale(next);
   useEffect(() => {
     const { title, description } = pageMetadata[locale];
     document.title = title;

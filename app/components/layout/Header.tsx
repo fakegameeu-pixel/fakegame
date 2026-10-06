@@ -24,15 +24,15 @@ export function Header({ onReserve }: HeaderProps) {
 }
 
 function PrivacyHeaderContent() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   return (
     <header className="privacyHeader">
-      <a className="privacyBrand" href="/" aria-label="Fake Wedding">
+      <a className="privacyBrand" href={`/${locale}`} aria-label="Fake Wedding">
         Fake Wedding
       </a>
       <div className="heroTools privacyTools">
-        <a className="headerReserve privacyReserve" href="/">
+        <a className="headerReserve privacyReserve" href={`/${locale}`}>
           {t.hero.cta}
         </a>
         <LanguageSwitcher />
