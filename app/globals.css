@@ -44,7 +44,7 @@ button {
 .cookieBanner {
   position: fixed;
   z-index: 30;
-  top: 50%;
+  bottom: 24px;
   left: 50%;
   display: flex;
   align-items: center;
@@ -56,7 +56,7 @@ button {
   background: rgba(71, 10, 21, 0.97);
   box-shadow: 0 16px 42px rgba(48, 5, 13, 0.3);
   color: #fff7f3;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
 }
 .cookieBannerCopy { flex: 1; }
 .cookieBanner p { margin: 0; }
@@ -84,7 +84,7 @@ button {
 .cookieAccept:hover { background: #ffe0d9; }
 .cookieBanner button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 @media (max-width: 620px) {
-  .cookieBanner { display: block; padding: 18px; }
+  .cookieBanner { bottom: 16px; display: block; padding: 18px; }
   .cookieBannerActions { margin-top: 15px; }
   .cookieBanner button { flex: 1; }
 }
