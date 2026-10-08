@@ -11,6 +11,7 @@ import { Perks } from "./Perks";
 import { PhotoStrip } from "./PhotoStrip";
 import { Story } from "./Story";
 import { useI18n } from "../lib/i18n";
+import { CookieBanner } from "./CookieBanner";
 
 export function WeddingLanding() {
   const [isInvitationOpen, setIsInvitationOpen] = useState(false);
@@ -31,6 +32,7 @@ export function WeddingLanding() {
       </section>
       <Footer />
       {isInvitationOpen && <InvitationModal onClose={() => setIsInvitationOpen(false)} />}
+      <CookieBanner />
     </main>
   );
 }

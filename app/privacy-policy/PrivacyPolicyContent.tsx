@@ -13,20 +13,15 @@ export function PrivacyPolicyContent() {
         <Link className="privacyBack" href={`/${locale}`}>
           <span aria-hidden="true">←</span> {privacy.back}
         </Link>
-        <p className="eyebrow dark">{privacy.eyebrow}</p>
+        {/* <p className="eyebrow dark">{privacy.eyebrow}</p> */}
         <h1>{privacy.title}</h1>
-        <p className="privacyLead">{privacy.lead}</p>
-        <p className="privacyUpdated">
-          {privacy.updated} <time dateTime="2026-10-03">{privacy.date}</time>
+        {/* <p className="privacyLead">{privacy.lead}< /p> */}
+        <p className="privacyUpdated mt-2">
+          {privacy.updated} <time dateTime="2026-10-08">{privacy.date}</time>
         </p>
       </header>
       <div className="privacyContent">
-        <aside className="privacyAside" aria-label={privacy.asideTitle}>
-          <span>{privacy.asideTitle}</span>
-          <p>{privacy.asideText}</p>
-          <a href="tel:+37125172252">{privacy.contact} ↗</a>
-        </aside>
-        <div className="privacySections">
+        {/* <div className="privacySections"> */}
           {privacy.sections.map((section, index) => (
             <section key={section.title}>
               <h2>
@@ -34,7 +29,7 @@ export function PrivacyPolicyContent() {
               </h2>
               <p>
                 {section.text}
-                {index === 4 && (
+                {index === 5 && (
                   <>
                     {" "}
                     <a href="tel:+37125172252">+371 25172252</a>.
@@ -43,7 +38,7 @@ export function PrivacyPolicyContent() {
               </p>
             </section>
           ))}
-        </div>
+        {/* </div> */}
       </div>
     </article>
   );

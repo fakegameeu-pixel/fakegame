@@ -41,6 +41,53 @@ input {
 button {
   cursor: pointer;
 }
+.cookieBanner {
+  position: fixed;
+  z-index: 30;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  width: min(620px, calc(100vw - 32px));
+  padding: 19px 20px 19px 23px;
+  border: 1px solid rgba(212, 163, 153, 0.55);
+  border-radius: 18px;
+  background: rgba(71, 10, 21, 0.97);
+  box-shadow: 0 16px 42px rgba(48, 5, 13, 0.3);
+  color: #fff7f3;
+  transform: translate(-50%, -50%);
+}
+.cookieBannerCopy { flex: 1; }
+.cookieBanner p { margin: 0; }
+.cookieBannerTitle {
+  margin-bottom: 5px !important;
+  color: #f4c3ba;
+  font: 600 23px/1 "Cormorant Garamond", serif;
+}
+.cookieBannerCopy > p:last-child { font-size: 11px; line-height: 1.55; }
+.cookieBanner a { color: #f8c8be; text-underline-offset: 3px; }
+.cookieBannerActions { display: flex; flex: 0 0 auto; gap: 9px; }
+.cookieBanner button {
+  min-height: 38px;
+  border-radius: 999px;
+  padding: 0 14px;
+  font: 700 9px/1 Manrope, Arial, sans-serif;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  transition: 180ms ease;
+}
+.cookieDecline { border: 1px solid rgba(255, 241, 236, 0.5); background: transparent; color: #fff7f3; }
+.cookieAccept { border: 1px solid #f1b1a8; background: #f1b1a8; color: #5b101b; }
+.cookieBanner button:hover { transform: translateY(-1px); }
+.cookieDecline:hover { background: rgba(255, 248, 244, 0.12); }
+.cookieAccept:hover { background: #ffe0d9; }
+.cookieBanner button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+@media (max-width: 620px) {
+  .cookieBanner { display: block; padding: 18px; }
+  .cookieBannerActions { margin-top: 15px; }
+  .cookieBanner button { flex: 1; }
+}
 .consent a,
 .privacyLink {
   color: #8d1f2f;
@@ -216,7 +263,7 @@ button {
     min-height: 760px !important;
   }
   .heroNote {
-    bottom: 16px !important;
+    bottom: 118px !important;
   }
 }
 .footer {
@@ -462,6 +509,83 @@ button {
 .languageSwitcher select option {
   background: #390914;
   color: #fff;
+}
+.languageSwitchControl {
+  position: relative;
+  display: inline-flex;
+  z-index: 10;
+}
+.languageSwitchTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 244, 239, 0.7);
+  border-radius: 999px;
+  background: rgba(78, 14, 24, 0.72);
+  box-shadow: 0 6px 20px rgba(52, 7, 14, 0.22);
+  color: #fffaf7;
+  font: 700 12px/1 Manrope, Arial, sans-serif;
+  letter-spacing: 0.12em;
+}
+.languageSwitchTrigger:hover,
+.languageSwitchTrigger[aria-expanded="true"] {
+  border-color: #fffaf7;
+  background: rgba(78, 14, 24, 0.92);
+}
+.languageSwitchTrigger:focus-visible,
+.languageSwitchMenu button:focus-visible {
+  outline: 2px solid #fffaf7;
+  outline-offset: 3px;
+}
+.languageSwitchGlobe,
+.languageSwitchChevron {
+  display: block;
+  flex: 0 0 auto;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.languageSwitchGlobe {
+  width: 19px;
+  height: 19px;
+  stroke-width: 1.6;
+}
+.languageSwitchChevron {
+  width: 13px;
+  height: 13px;
+  stroke-width: 1.9;
+  transition: transform 180ms ease;
+}
+.languageSwitchTrigger[aria-expanded="true"] .languageSwitchChevron {
+  transform: rotate(180deg);
+}
+.languageSwitchMenu {
+  position: absolute;
+  top: calc(100% + 7px);
+  right: 0;
+  display: grid;
+  min-width: 100%;
+  padding: 5px;
+  border: 1px solid rgba(255, 244, 239, 0.55);
+  border-radius: 13px;
+  background: #4e0e18;
+  box-shadow: 0 14px 34px rgba(52, 7, 14, 0.3);
+}
+.languageSwitchMenu button {
+  padding: 9px 11px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #fffaf7;
+  font: 700 11px/1 Manrope, Arial, sans-serif;
+  letter-spacing: 0.1em;
+  text-align: left;
+}
+.languageSwitchMenu button:hover {
+  background: rgba(255, 244, 239, 0.16);
 }
 .srOnly {
   position: absolute;
@@ -1404,7 +1528,7 @@ footer {
   letter-spacing: 0.04em;
 }
 .privacyContent {
-  display: grid;
+  /* display: grid; */
   grid-template-columns: 200px minmax(0, 1fr);
   gap: clamp(38px, 7vw, 86px);
   margin-top: 66px;
