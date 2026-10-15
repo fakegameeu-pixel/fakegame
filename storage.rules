@@ -1,0 +1,12 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin'; }
+    function isManager() { return signedIn() && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'manager'; }
+    match /participant-photos/{userId}/{fileName} {
+      allow write: if isManager() && request.auth.uid == userId && request.resource.size < 10 * 1024 * 1024 && request.resource.contentType.matches('image/.*');
+      allow read: if isAdmin();
+    }
+  }
+}

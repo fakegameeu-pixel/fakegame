@@ -28,6 +28,7 @@ export function startGoogleAnalytics() {
     googleWindow.gtag?.("js", new Date());
     googleWindow.gtag?.("config", measurementId, { send_page_view: false });
     googleWindow.gtag?.("event", "page_view", {
+      send_to: measurementId,
       page_location: window.location.href,
       page_path: window.location.pathname,
       page_title: document.title,
