@@ -1,6 +1,7 @@
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 
 export function getAdminServices() {
   const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
@@ -16,7 +17,7 @@ export function getAdminServices() {
       client_email: process.env.FIREBASE_CLIENT_EMAIL,
       private_key: privateKey,
     };
-    initializeApp({ credential: cert(serviceAccount) });
+    initializeApp({ credential: cert(serviceAccount), storageBucket: process.env.FIREBASE_STORAGE_BUCKET });
   }
-  return { adminAuth: getAuth(), adminDb: getFirestore() };
+  return { adminAuth: getAuth(), adminDb: getFirestore(), adminStorage: getStorage() };
 }

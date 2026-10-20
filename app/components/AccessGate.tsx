@@ -18,17 +18,28 @@ export function AccessGate({ children }: { children: (props: { user: User; profi
       stopProfile();
       if (!user) { setState("denied"); return; }
       const db = getFirebaseDb();
-      stopProfile = onSnapshot(doc(db, "users", user.uid), (snapshot) => {
-      const profile = snapshot.data() as Profile | undefined;
-      setState(profile ? { user, profile } : "denied");
-      });
+      const returnToLogin = () => {
+        void signOut(auth).finally(() => window.location.replace("/login?reason=access"));
+      };
+      stopProfile = onSnapshot(
+        doc(db, "users", user.uid),
+        (snapshot) => {
+          const profile = snapshot.data() as Profile | undefined;
+          if (profile) setState({ user, profile });
+          else returnToLogin();
+        },
+        (error) => {
+          console.error("Could not load the user profile from Firestore.", error);
+          returnToLogin();
+        },
+      );
     });
     return () => { stopAuth(); stopProfile(); };
   }, []);
 
   if (state === "loading") return <main className="accessLoading">Загружаем доступ…</main>;
   if (state === "denied") {
-    return <main className="accessLoading"><div><h1>Нет доступа</h1><p>Войдите под учётной записью, которую создал администратор.</p><a href="/login">Ко входу</a></div></main>;
+    return <main className="accessLoading"><div><a href="/login">Ко входу</a></div></main>;
   }
   return <>{children({ ...state, logout: () => signOut(getFirebaseAuth()) })}</>;
 }
