@@ -1815,3 +1815,10 @@ footer {
 .adminPhotoDialogContent header button { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #f4e6e0; color: #5c101b; font-size: 28px; }
 .adminPhotoDialog .adminPhotoDialogContent > img { display: block; width: 100%; height: auto; max-height: calc(100dvh - 145px); object-fit: contain; border-radius: 8px; background: #f2e8e3; }
 .galleryPhotoCover .galleryPrizeBadge, .galleryPhotoCover .galleryPhotoNumber { pointer-events: none; }
+.aiDrawRailAutoplay { animation: drawAutoplay var(--draw-idle-duration, 18s) linear infinite; transition: none !important; }
+.aiDrawRailAutoplay .aiDrawCard { opacity: 1; }
+@keyframes drawAutoplay {
+  from { transform: translateX(calc(-2 * (var(--card) + var(--gap)) - var(--card) / 2)); }
+  to { transform: translateX(calc((-2 - var(--draw-loop)) * (var(--card) + var(--gap)) - var(--card) / 2)); }
+}
+@media (prefers-reduced-motion: reduce) { .aiDrawRailAutoplay { animation: none; transform: translateX(calc(-2 * (var(--card) + var(--gap)) - var(--card) / 2)); } }

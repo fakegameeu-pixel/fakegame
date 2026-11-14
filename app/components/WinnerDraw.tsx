@@ -18,8 +18,6 @@ export function WinnerDraw({ eventId }: { eventId: string }) {
   const [results, setResults] = useState<Result[]>([]);
   const [error, setError] = useState("");
   const [duration, setDuration] = useState(6500);
-  const [flipPhoto, setFlipPhoto] = useState<Photo>();
-  const [flipped, setFlipped] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const frame = useRef<number | undefined>(undefined);
@@ -59,7 +57,7 @@ export function WinnerDraw({ eventId }: { eventId: string }) {
 
   async function start() {
     if (locked.current || place < 1) return;
-    locked.current = true; setLoading(true); setError(""); setRevealed(false); setFlipped(false); setFlipPhoto(undefined);
+    locked.current = true; setLoading(true); setError(""); setRevealed(false);
     try {
       const fresh = await load();
       if (!alive.current) return;
@@ -77,8 +75,6 @@ export function WinnerDraw({ eventId }: { eventId: string }) {
         frame.current = requestAnimationFrame(() => {
           setDuration(ms); setIndex(48);
           timer.current = setTimeout(() => {
-            setFlipPhoto(target);
-            setFlipped(true);
             setRevealed(true);
             timer.current = setTimeout(() => {
               setResults((current) => [...current, { place: drawPlace, photo: target }]);
@@ -93,13 +89,18 @@ export function WinnerDraw({ eventId }: { eventId: string }) {
   }
 
   const last = results[results.length - 1];
+  const availablePhotos = data?.photos.filter((photo) => photo.url) ?? [];
+  const idle = !spinning && !loading && !modalResult && availablePhotos.length > 0;
+  const displayedRail = idle
+    ? Array.from({ length: availablePhotos.length * 3 + 8 }, (_, i) => availablePhotos[i % availablePhotos.length])
+    : rail;
   return <main className={`aiDraw ${spinning ? "isSpinning" : ""} ${revealed ? "isRevealed" : ""}`}>
     <div className="aiDrawGrid" aria-hidden="true" />
     <header className="aiDrawHeader"><a href="/">← Fake Wedding</a><button onClick={() => { if (!document.fullscreenElement) void document.documentElement.requestFullscreen().catch(() => setError("Полноэкранный режим недоступен.")); else void document.exitFullscreen(); }}>На весь экран ↗</button></header>
     <section className="aiDrawIntro"><h1>В центре внимания.<br /><em>Один из вас.</em></h1><span>Три места. Три момента славы.</span></section>
     <section className="aiDrawMachine" aria-label="Карусель фотографий">
       <div className="aiDrawPointer" aria-hidden="true">▼</div>
-      <div className="aiDrawViewport"><div className="aiDrawRail" style={{ "--draw-index": index, transitionDuration: `${duration}ms` } as CSSProperties}>{rail.map((photo, i) => <div className={`aiDrawCard ${i === index ? "focused" : ""}`} key={`${i}-${photo.id}`}><div className={`aiDrawRailFlip ${results.some((result) => result.photo.id === photo.id) || (i === index && flipped) ? "flipped" : ""}`}><div className="aiDrawMysteryInner"><div className="aiDrawMysteryFront" aria-label="Закрытая карточка"><span>?</span></div><div className="aiDrawMysteryBack">{results.some((result) => result.photo.id === photo.id) ? <img src={photo.url} alt="Объявленный победитель" /> : i === index && flipPhoto ? <img src={flipPhoto.url} alt="Победитель" /> : null}</div></div></div></div>)}</div>{!rail.length && <div className="aiDrawNoPhoto">{loading ? "Загружаем фотографии…" : "Добавьте фотографии в галерею мероприятия"}</div>}<div className="aiDrawSelection" aria-hidden="true" /></div>
+      <div className="aiDrawViewport"><div className={`aiDrawRail ${idle ? "aiDrawRailAutoplay" : ""}`} style={{ "--draw-index": index, "--draw-loop": availablePhotos.length, "--draw-idle-duration": `${Math.max(12, availablePhotos.length * 3)}s`, transitionDuration: `${duration}ms` } as CSSProperties}>{displayedRail.map((photo, i) => <div className={`aiDrawCard ${!idle && i === index ? "focused" : ""}`} key={`${idle ? "idle" : "draw"}-${i}-${photo.id}`}>{photo.url ? <img src={photo.url} alt={photo.roleTitle || "Фото участника"} /> : <div className="aiDrawNoPhoto">Фото недоступно</div>}</div>)}</div>{!displayedRail.length && <div className="aiDrawNoPhoto">{loading ? "Загружаем фотографии…" : "Добавьте фотографии в галерею мероприятия"}</div>}<div className="aiDrawSelection" aria-hidden="true" /></div>
       <div className="aiDrawMachineBottom"><div className="aiDrawBars" aria-hidden="true">{Array.from({ length: 24 }, (_, i) => <i key={i} style={{ animationDelay: `${i * 0.09}s` }} />)}</div></div>
     </section>
     <section className="aiDrawControls" aria-live="polite">

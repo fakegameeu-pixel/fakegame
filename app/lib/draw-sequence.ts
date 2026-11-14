@@ -2,10 +2,6 @@ type Card = { id: string; name: string; url: string };
 
 export function buildDrawSequence<T extends Card>(photos: T[], target: T): Array<T | Card> {
   const others: Card[] = [...new Map(photos.filter((photo) => photo.id !== target.id).map((photo) => [photo.id, photo])).values()];
-  // Leave enough space between repeated photos, including with a small gallery.
-  while (others.length < 6) {
-    others.push({ id: `closed-placeholder-${others.length}`, name: "Закрытая карточка", url: "" });
-  }
   for (let i = others.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [others[i], others[j]] = [others[j], others[i]];
