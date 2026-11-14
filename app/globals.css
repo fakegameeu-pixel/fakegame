@@ -1799,3 +1799,19 @@ footer {
 .aiDrawRailFlip { width: 100%; height: 100%; perspective: 1000px; }
 .aiDrawRailFlip.flipped .aiDrawMysteryInner { transform: rotateY(180deg); }
 .aiDrawSelection { background: transparent; }
+.adminPhotoTrigger { position: relative; display: block; padding: 0; border: 0; overflow: hidden; background: transparent; cursor: zoom-in; }
+.galleryPhotoTrigger { width: 100%; height: 100%; }
+.adminPhotoZoom { position: absolute; right: 12px; bottom: 12px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 6px; background: #fffaf7e8; color: #5c101b; font-size: 22px; opacity: 0; transition: opacity .15s; }
+.adminPhotoTrigger:hover .adminPhotoZoom, .adminPhotoTrigger:focus-visible .adminPhotoZoom { opacity: 1; }
+.adminPhotoTrigger:focus-visible { outline: 2px solid #8d1f2f; outline-offset: 3px; }
+.participantIdentity .participantPhotoTrigger { width: 42px; height: 48px; flex-shrink: 0; border-radius: 6px; }
+.participantIdentity .participantPhotoTrigger img { width: 100%; height: 100%; object-fit: cover; }
+.participantIdentity .adminPhotoZoom { display: none; }
+.adminPhotoDialog { position: fixed; inset: 0; margin: auto; width: min(900px, calc(100vw - 32px)); max-width: calc(100vw - 32px); max-height: calc(100dvh - 32px); padding: 0; overflow: auto; border: 1px solid #e5c0b7; border-radius: 14px; background: #fffaf7; color: #5c101b; box-shadow: 0 20px 80px #0005; }
+.adminPhotoDialog::backdrop { background: #160b0ddd; backdrop-filter: blur(5px); }
+.adminPhotoDialogContent { padding: 20px; }
+.adminPhotoDialogContent header { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 16px; }
+.adminPhotoDialogContent h2 { margin: 0; font-size: 22px; overflow-wrap: anywhere; }
+.adminPhotoDialogContent header button { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; border-radius: 50%; background: #f4e6e0; color: #5c101b; font-size: 28px; }
+.adminPhotoDialog .adminPhotoDialogContent > img { display: block; width: 100%; height: auto; max-height: calc(100dvh - 145px); object-fit: contain; border-radius: 8px; background: #f2e8e3; }
+.galleryPhotoCover .galleryPrizeBadge, .galleryPhotoCover .galleryPhotoNumber { pointer-events: none; }

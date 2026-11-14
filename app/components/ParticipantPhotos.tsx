@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { PhotoPreview } from "./PhotoPreview";
 import { unzipSync } from "fflate";
 import { getFirebaseAuth } from "../lib/firebase";
 
@@ -166,7 +167,7 @@ export function ParticipantPhotos({ eventId, title }: { eventId: string; title?:
       const place = Object.keys(winners).find((key) => winners[key] === photo.id);
       const label = `Фото ${index + 1}`;
       return <article className={`galleryPhotoCard ${place ? "hasPrize" : ""}`} key={photo.id}>
-        <div className="galleryPhotoCover">{photo.url ? <img src={photo.url} alt={label} /> : <div className="participantPhotoPlaceholder">Фото недоступно</div>}{place && <span className="galleryPrizeBadge">★ {place}-е место</span>}<span className="galleryPhotoNumber">{String(index + 1).padStart(2, "0")}</span><button className="galleryPhotoDelete" disabled={busy} onClick={() => void deletePhoto(photo)} aria-label={`Удалить ${label.toLowerCase()}`} title="Удалить фото"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6M14 10v6" /></svg></button></div>
+        <div className="galleryPhotoCover">{photo.url ? <PhotoPreview src={photo.url} title={photo.roleTitle || label} className="galleryPhotoTrigger" /> : <div className="participantPhotoPlaceholder">Фото недоступно</div>}{place && <span className="galleryPrizeBadge">★ {place}-е место</span>}<span className="galleryPhotoNumber">{String(index + 1).padStart(2, "0")}</span><button className="galleryPhotoDelete" disabled={busy} onClick={() => void deletePhoto(photo)} aria-label={`Удалить ${label.toLowerCase()}`} title="Удалить фото"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18M9 6V4h6v2M5 6l1 14h12l1-14M10 10v6M14 10v6" /></svg></button></div>
         <div className="galleryPhotoBody"><div className="galleryPhotoTitle"><strong>{photo.roleTitle || "Роль не назначена"}</strong><span>{photo.roleTitle ? "Роль участника" : "Выберите роль ниже"}</span></div>
           <PhotoRoleEditor photo={photo} roles={roles} busy={busy} onSave={saveRole} />
           <label className="photoWinnerSelect">Призовое место<select aria-label={`Место для ${label}`} disabled={busy} value={place || "0"} onChange={(event) => void chooseWinner(photo.id, Number(event.target.value))}><option value="0">Без места</option><option value="1">1-е место</option><option value="2">2-е место</option><option value="3">3-е место</option></select></label>
