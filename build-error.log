@@ -1,0 +1,9 @@
+
+> Build error occurred
+[Error: ENOENT: no such file or directory, rename 'C:\Users\User\Documents\It projekt\fakewedding\.next\export\500.html' -> 'C:\Users\User\Documents\It projekt\fakewedding\.next\server\pages\500.html'] {
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'rename',
+  path: 'C:\\Users\\User\\Documents\\It projekt\\fakewedding\\.next\\export\\500.html',
+  dest: 'C:\\Users\\User\\Documents\\It projekt\\fakewedding\\.next\\server\\pages\\500.html'
+}
