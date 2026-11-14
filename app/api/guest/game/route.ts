@@ -82,8 +82,8 @@ export async function GET(request: Request) {
       const photoPath = item.data().photoPath as string | undefined;
       const rolePhotoPath = roleDocs[index]?.data()?.photoPath as string | undefined;
       let photoUrl: string | undefined;
-      if (rolePhotoPath || photoPath) {
-        const [url] = await bucket.file(rolePhotoPath || photoPath!).getSignedUrl({ action: "read", version: "v4", expires: Date.now() + 15 * 60 * 1000 });
+      if (photoPath || rolePhotoPath) {
+        const [url] = await bucket.file(photoPath || rolePhotoPath!).getSignedUrl({ action: "read", version: "v4", expires: Date.now() + 15 * 60 * 1000 });
         photoUrl = url;
       }
       return { id: item.id, photoUrl, found: found.has(item.id) };

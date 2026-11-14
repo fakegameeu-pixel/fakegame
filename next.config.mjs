@@ -1,5 +1,8 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants.js";
+
+/** @returns {import('next').NextConfig} */
+const nextConfig = (phase) => ({
+  distDir: phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next",
   // These values identify the Firebase web application and are safe to expose
   // in the browser. Server credentials are deliberately not listed here.
   env: {
@@ -10,6 +13,6 @@ const nextConfig = {
     FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
   },
-};
+});
 
 export default nextConfig;
