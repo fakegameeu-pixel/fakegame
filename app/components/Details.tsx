@@ -45,7 +45,7 @@ export function Details({ onReserve }: DetailsProps) {
       value: t.details.limited,
       label: t.details.guests,
     },
-    { type: "price" as const, value: "120€", label: t.details.price },
+    { type: "price" as const, value: "140€", label: t.details.price },
   ];
   return (
     <section className="details" id="details">
