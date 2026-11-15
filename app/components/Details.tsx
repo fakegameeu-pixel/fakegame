@@ -38,7 +38,7 @@ function DetailIcon({ type }: { type: "date" | "place" | "guests" | "price" }) {
 export function Details({ onReserve }: DetailsProps) {
   const { t } = useI18n();
   const details = [
-    { type: "date" as const, value: "13.02.2026", label: t.details.date },
+    { type: "date" as const, value: "13.02.2027", label: t.details.date },
     { type: "place" as const, value: t.details.city, label: t.details.place },
     {
       type: "guests" as const,

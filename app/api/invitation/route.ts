@@ -56,7 +56,7 @@ function confirmationEmail(name: string, locale: Locale) {
     lv: {
       greeting: "Sveiki",
       heading: "Paldies par interesi!",
-      body: "Pasākuma datums: 13.02.2026. Tava biļetes iegādes saite ir zemāk.",
+      body: "Pasākuma datums: 13.02.2027. Tava biļetes iegādes saite ir zemāk.",
       ticketText: "Iegādājoties biļeti, tu sniedz ieguldījumu jaunlaulāto pirmajā ģimenes budžetā.",
       ticketLabel: "Iegādāties biļeti",
       closing: "Līdz tikšanās reizei!",
@@ -64,7 +64,7 @@ function confirmationEmail(name: string, locale: Locale) {
     ru: {
       greeting: "Здравствуйте",
       heading: "Спасибо за интерес!",
-      body: "Дата мероприятия: 13.02.2026. Ссылка на покупку билета уже ждёт вас ниже.",
+      body: "Дата мероприятия: 13.02.2027. Ссылка на покупку билета уже ждёт вас ниже.",
       ticketText: "Купив билет, вы вносите вклад в первый семейный бюджет молодых.",
       ticketLabel: "Купить билет",
       closing: "До встречи!",
@@ -72,7 +72,7 @@ function confirmationEmail(name: string, locale: Locale) {
     en: {
       greeting: "Hello",
       heading: "Thank you for your interest!",
-      body: "Event date: 13.02.2026. Your ticket purchase link is below.",
+      body: "Event date: 13.02.2027. Your ticket purchase link is below.",
       ticketText: "By buying a ticket, you contribute to the newlyweds’ first family budget.",
       ticketLabel: "Buy a ticket",
       closing: "See you soon!",
