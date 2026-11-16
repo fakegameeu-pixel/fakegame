@@ -1157,6 +1157,38 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
+.detailsAge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 22px;
+  color: #87605d;
+  text-align: left;
+}
+.detailsAgeBadge {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  height: 42px;
+  border: 1px solid #d8b8b0;
+  border-radius: 50%;
+  background: rgba(150, 43, 56, 0.04);
+  color: #962b38;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.detailsAge p {
+  max-width: 290px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
 .centered {
   display: inline-block;
 }

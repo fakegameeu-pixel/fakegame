@@ -62,6 +62,10 @@ export function Details({ onReserve }: DetailsProps) {
               </div>
             ))}
           </div>
+          <div className="detailsAge">
+            <span className="detailsAgeBadge" aria-hidden="true">18+</span>
+            <p>{t.details.ageRestriction}</p>
+          </div>
           <button className="primaryButton centered" onClick={onReserve}>
             {t.details.reserve} <span>→</span>
           </button>
