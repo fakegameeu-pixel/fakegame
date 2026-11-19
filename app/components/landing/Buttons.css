@@ -1,0 +1,61 @@
+/* Единый стиль всех кнопок: золотая пилюля, тёмный текст, один размер (48 px).
+   Селекторы начинаются с .fw, чтобы перебить правило `.fw a { color: inherit }`
+   для кнопок-ссылок (<a class="fwBtn...">). Подключается последним. */
+
+.fw .fwBtnGold,
+.fw .fwBtnDark,
+.fw .fwBtnGhost,
+.fw .fwBtnGhostDark,
+.fw .fwBtnSmall {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 28px;
+  border-radius: 999px;
+  border: 1px solid var(--fw-gold);
+  background: var(--fw-gold);
+  color: var(--fw-ink);
+  font: 600 15px "Manrope", sans-serif;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fw .fwBtnGold:hover,
+.fw .fwBtnDark:hover,
+.fw .fwBtnGhost:hover,
+.fw .fwBtnGhostDark:hover,
+.fw .fwBtnSmall:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(224, 178, 106, 0.35);
+}
+
+/* Кнопка внутри золотой панели: тёмная рамка, иначе она теряется. */
+.fw .fwNextRight .fwBtnDark,
+.fw .fwNextRight .fwBtnGold {
+  border-color: var(--fw-ink);
+}
+
+/* Кнопки в тёмном блоке BUJ — тот же стиль, текст тёмный. */
+.fw .fwAsk .fwBtnGold,
+.fw .fwAsk .fwBtnGhostDark {
+  color: var(--fw-ink);
+  border-color: var(--fw-gold);
+  background: var(--fw-gold);
+}
+
+/* Hero: вторая кнопка — контурная (прозрачный фон, золотая рамка) на тёмном фоне. */
+.fw .fwHero .fwBtnGhost {
+  background: transparent;
+  color: var(--fw-cream);
+  border-color: var(--fw-gold);
+}
+
+.fw .fwHero .fwBtnGhost:hover {
+  background: rgba(224, 178, 106, 0.12);
+  box-shadow: none;
+}

@@ -1,0 +1,8 @@
+/* Лендинг на всю ширину экрана: перекрывает любые глобальные ограничения ширины у main.fw. */
+
+.fw {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 100%;
+  margin: 0 !important;
+}

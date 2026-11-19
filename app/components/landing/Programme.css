@@ -1,0 +1,44 @@
+/* Фото программы в золотой рамке: фото видно полностью, внутри тонкая рамка.
+   При наведении карточка слегка приподнимается. */
+
+.fwCard {
+  isolation: isolate;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fwCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 28px 60px rgba(42, 10, 18, 0.32);
+}
+
+/* Внутренняя золотая рамка поверх фото. */
+.fwCard::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  z-index: 2;
+  border: 1px solid rgba(224, 178, 106, 0.85);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.fwCardArch::before {
+  border-radius: 186px 186px 14px 14px;
+}
+
+/* Фото показываем полностью, без затемнения, — затемнён только низ под текст. */
+.fwCardImg {
+  opacity: 1;
+}
+
+.fwCardBody {
+  background: linear-gradient(180deg, transparent 0%, rgba(42, 10, 18, 0.92) 55%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fwCard,
+  .fwCard:hover {
+    transition: none;
+    transform: none;
+  }
+}

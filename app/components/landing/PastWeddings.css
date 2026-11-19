@@ -1,0 +1,93 @@
+/* «Iepriekšējās kāzas» — тёмная кино-лента с перфорацией, наклоном и бесконечной прокруткой. */
+
+.fwPast {
+  overflow: hidden;
+}
+
+.fwStrip {
+  position: relative;
+  margin: 28px -40px 0;
+  padding: 36px 0;
+  background: var(--fw-wine);
+  transform: rotate(-3deg);
+  box-shadow: 0 18px 40px rgba(42, 10, 18, 0.35);
+}
+
+/* Перфорация сверху и снизу: ряд светлых квадратов. */
+.fwStrip::before,
+.fwStrip::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: repeating-linear-gradient(90deg, var(--fw-cream) 0 12px, transparent 12px 36px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.fwStrip::before {
+  top: 10px;
+}
+
+.fwStrip::after {
+  bottom: 10px;
+}
+
+/* Дорожка из двух одинаковых копий кадров; сдвиг на -50% = одна копия, стыка не видно. */
+.fwStripTrack {
+  display: flex;
+  width: max-content;
+  animation: fwStripRun 45s linear infinite;
+}
+
+.fwStrip:hover .fwStripTrack {
+  animation-play-state: paused;
+}
+
+@keyframes fwStripRun {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Одна копия: кадры и отступ справа, чтобы стык между копиями был такой же, как между кадрами. */
+.fwStripFrames {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px 0 0;
+  display: flex;
+  gap: 12px;
+}
+
+.fwStripFrame {
+  flex: 0 0 240px;
+}
+
+.fwStripImg {
+  aspect-ratio: 1 / 1.1;
+  background-color: var(--fw-ink);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 960px) {
+  .fwStrip {
+    margin: 24px -24px 0;
+    transform: rotate(-2deg);
+  }
+
+  .fwStripFrame {
+    flex-basis: 180px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fwStripTrack {
+    animation: none;
+  }
+}

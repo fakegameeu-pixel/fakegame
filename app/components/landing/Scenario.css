@@ -1,0 +1,89 @@
+/* Блок «Kā tas notiek» в стиле референса: двойная рамка, иконки в кругах,
+   пунктирная линия между шагами, финальный шаг — залитый золотом. */
+
+.fwScenario {
+  position: relative;
+}
+
+/* Внутренняя тонкая рамка блока. */
+.fwScenario::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(224, 178, 106, 0.22);
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.fwSteps {
+  position: relative;
+}
+
+/* Пунктирная линия через центры кругов (от первого до последнего шага). */
+.fwSteps::before {
+  content: "";
+  position: absolute;
+  top: 32px;
+  left: 12.5%;
+  right: 12.5%;
+  border-top: 1px dashed rgba(224, 178, 106, 0.45);
+  z-index: 0;
+}
+
+.fwStep {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fwStep .fwStepDot {
+  width: 64px;
+  height: 64px;
+  margin: 0 0 16px;
+  border-radius: 50%;
+  border: 1px solid var(--fw-gold);
+  background: var(--fw-ink);
+  color: var(--fw-gold);
+  display: grid;
+  place-items: center;
+}
+
+.fwStep .fwStepDot svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fwStepNum {
+  font: 500 13px "Manrope", sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fw-gold);
+  margin-bottom: 12px;
+}
+
+.fwStep h3 {
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+
+.fwStep p:last-child {
+  font-size: 14px;
+  opacity: 0.8;
+  max-width: 240px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Финальный шаг: золотой круг с ореолом. */
+.fwStepFinal .fwStepDot {
+  background: var(--fw-gold);
+  color: var(--fw-ink);
+  box-shadow: 0 0 0 8px rgba(224, 178, 106, 0.15);
+}

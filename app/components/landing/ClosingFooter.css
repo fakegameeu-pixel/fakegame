@@ -1,0 +1,58 @@
+/* Футер: без фона и рамки, иконки Instagram и WhatsApp, всё по центру внизу. */
+
+.fwClose .fwFoot {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  margin-top: 96px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  text-align: center;
+}
+
+.fwClose .fwFootIcons {
+  display: flex;
+  gap: 14px;
+}
+
+.fwClose .fwFootIcons a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--fw-gold);
+  color: var(--fw-gold);
+  display: grid;
+  place-items: center;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.fwClose .fwFootIcons a:hover {
+  background: var(--fw-gold);
+  color: var(--fw-ink);
+}
+
+.fwClose .fwFootIcons svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fwClose .fwFootIcons .fwFootDot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.fwClose .fwFootLinks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  font-size: 13px;
+}

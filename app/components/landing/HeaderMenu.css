@@ -1,0 +1,146 @@
+/* Шапка в стиле референса: язык — текст со стрелкой, бургер — три светлые полоски. Без обводок и кругов. */
+
+.fwLangSel {
+  position: relative;
+}
+
+.fwLangBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  color: var(--fw-cream);
+  font: 600 14px "Manrope", sans-serif;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.fwLangBtn:hover {
+  color: var(--fw-gold);
+}
+
+.fwLangBtn .fwChevron {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.fwLangMenu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 60;
+  min-width: 110px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--fw-ink);
+  border: 1px solid rgba(224, 178, 106, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.fwLangMenu button {
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--fw-cream);
+  font: 600 14px "Manrope", sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fwLangMenu button:hover,
+.fwLangMenu button[aria-selected="true"] {
+  color: var(--fw-gold);
+}
+
+.fwBurger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.fwBurger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--fw-cream);
+}
+
+.fwBurger:hover span {
+  background: var(--fw-gold);
+}
+
+.fwDrawerBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(20, 4, 9, 0.55);
+}
+
+.fwDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  width: min(380px, 88vw);
+  padding: 28px 36px;
+  display: flex;
+  flex-direction: column;
+  background: var(--fw-ink);
+  color: var(--fw-cream);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.4);
+  animation: fwDrawerIn 0.3s ease;
+}
+
+@keyframes fwDrawerIn {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+
+.fwDrawerClose {
+  align-self: flex-end;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: none;
+  color: var(--fw-cream);
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.fwDrawerClose:hover {
+  color: var(--fw-gold);
+}
+
+.fwDrawerNav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+}
+
+.fwDrawerNav a {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(224, 178, 106, 0.15);
+  font: 400 34px "Cormorant Garamond", serif;
+}
+
+.fwDrawerNav a:hover {
+  color: var(--fw-gold);
+}

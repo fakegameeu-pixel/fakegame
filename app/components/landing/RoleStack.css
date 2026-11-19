@@ -1,0 +1,19 @@
+/* Колода ролей: в покое карты лежат стопкой, при наведении веером поднимаются вверх. */
+
+.fwRoleCard {
+  transform: rotate(var(--rot));
+  left: var(--left);
+  transform-origin: 50% 100%;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), left 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.fwRoleStack:hover .fwRoleCard {
+  transform: translateY(-90px) rotate(calc(var(--rot) * 1.4));
+  left: calc(var(--left) * 1.5 - 52px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fwRoleCard {
+    transition: none;
+  }
+}

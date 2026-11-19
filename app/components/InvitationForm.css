@@ -1,0 +1,70 @@
+/* Форма приглашения в стиле лендинга: капсульные поля, золотая кнопка, бейдж 18+. */
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.modal form input:not(.honeypot):not([type="checkbox"]) {
+  height: 52px;
+  padding: 0 22px;
+  border: 1px solid rgba(42, 10, 18, 0.25);
+  border-radius: 999px;
+  background: transparent;
+  font: 400 15px "Manrope", system-ui, sans-serif;
+  color: var(--fw-ink);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.modal form input:not(.honeypot):not([type="checkbox"]):focus {
+  border-color: var(--fw-gold);
+}
+
+.modal form input::placeholder {
+  color: var(--fw-muted);
+  opacity: 0.8;
+}
+
+.modal .consent {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fw-muted);
+}
+
+.modal .primaryButton {
+  height: 52px;
+  margin-top: 6px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fw-gold);
+  color: var(--fw-ink);
+  font: 600 15px "Manrope", system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.modal .primaryButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.modal .primaryButton:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.modal .ageBadge {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 5px 14px;
+  border: 1px solid var(--fw-ink);
+  border-radius: 999px;
+  font: 600 11px "Manrope", system-ui, sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fw-ink);
+}

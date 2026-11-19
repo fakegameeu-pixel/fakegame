@@ -2,10 +2,15 @@
 
 import { FormEvent, useState } from "react";
 import { useI18n } from "../lib/i18n";
+import "./InvitationForm.css";
 
-type InvitationModalProps = { onClose: () => void };
+type InvitationModalProps = {
+  onClose: () => void;
+  /** E-mail, введённый на лендинге (форма «Pieraksties»), подставляется в поле. */
+  initialEmail?: string;
+};
 
-export function InvitationModal({ onClose }: InvitationModalProps) {
+export function InvitationModal({ onClose, initialEmail }: InvitationModalProps) {
   const [sent, setSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState(false);
@@ -55,6 +60,7 @@ export function InvitationModal({ onClose }: InvitationModalProps) {
             <p className="eyebrow dark">{t.modal.eyebrow}</p>
             <h2>{t.modal.title}</h2>
             <p>{t.modal.text}</p>
+            <span className="ageBadge">Tikai 18+</span>
             <form onSubmit={submit}>
               <input required name="name" placeholder={t.modal.name} />
               <input
@@ -62,6 +68,7 @@ export function InvitationModal({ onClose }: InvitationModalProps) {
                 name="email"
                 type="email"
                 placeholder={t.modal.email}
+                defaultValue={initialEmail}
               />
               <input
                 required
