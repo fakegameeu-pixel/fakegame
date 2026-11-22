@@ -1,0 +1,51 @@
+/* Блок ближайших свадьбы на телефоне: компактнее, без растягивания. */
+@media (max-width: 960px) {
+  .fwNextWrap {
+    padding-top: 80px;
+  }
+
+  .fwNextWrap h2 {
+    font-size: 40px;
+    margin-bottom: 28px;
+  }
+
+  .fwNext {
+    border-radius: 20px;
+  }
+
+  .fwNextLeft,
+  .fwNextRight {
+    padding: 26px 22px;
+  }
+
+  .fwNext .fwNextMeta {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 14px;
+    margin-bottom: 24px;
+  }
+
+  .fwNext .fwNextMeta > div:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .fwNextMeta strong,
+  .fwNextMeta .fwCity {
+    font-size: 30px;
+  }
+
+  .fwChecks {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .fwPrice {
+    font-size: 56px;
+    margin: 6px 0 10px;
+  }
+
+  .fwNextRight .fwMuted {
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+}

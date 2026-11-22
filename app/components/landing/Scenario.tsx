@@ -1,4 +1,6 @@
-import { steps } from "./content";
+import { useI18n } from "../../lib/i18n";
+import { landingCopy } from "./copy";
+import { stepsMeta } from "./content";
 import "./Scenario.css";
 
 function TicketIcon() {
@@ -41,24 +43,26 @@ function GlassIcon() {
 const icons = [TicketIcon, EnvelopeIcon, MaskIcon, GlassIcon];
 
 export function Scenario() {
+  const { locale } = useI18n();
+  const c = landingCopy[locale].steps;
   return (
     <section className="fwScenario" id="how">
       <div className="fwScenarioInner">
-        <p className="fwEyebrow fwEyebrowLight fwCenter">Ceļš · 4 soļi līdz altāram</p>
+        <p className="fwEyebrow fwEyebrowLight fwCenter">{c.eyebrow}</p>
         <h2 className="fwCenter">
-          Kā tas <em>notiek</em>
+          {c.title} <em>{c.titleAccent}</em>
         </h2>
         <ol className="fwSteps">
-          {steps.map((s, i) => {
+          {stepsMeta.map((s, i) => {
             const Icon = icons[i];
             return (
               <li key={s.n} className={`fwStep${s.final ? " fwStepFinal" : ""}`}>
                 <span className="fwStepDot">
                   <Icon />
                 </span>
-                <p className="fwStepNum">{s.final ? `${s.n} · Fināls` : s.n}</p>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
+                <p className="fwStepNum">{s.final ? `${s.n} · ${c.final}` : s.n}</p>
+                <h3>{c.items[i].title}</h3>
+                <p>{c.items[i].text}</p>
               </li>
             );
           })}

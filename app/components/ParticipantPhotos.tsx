@@ -11,7 +11,7 @@ const imagePattern = /\.(jpe?g|png|webp)$/i;
 type Photo = { id: string; name: string; url: string; roleTitle?: string; roleId?: string };
 type RoleOption = { id: string; title: string };
 
-export function ParticipantPhotos({ eventId, title }: { eventId: string; title?: string }) {
+export function ParticipantPhotos({ eventId, title, embedded = false }: { eventId: string; title?: string; embedded?: boolean }) {
   const [pending, setPending] = useState<Pending[]>([]);
   const [roles, setRoles] = useState<RoleOption[]>([]);
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -149,7 +149,7 @@ export function ParticipantPhotos({ eventId, title }: { eventId: string; title?:
     finally { setBusy(false); }
   }
   return <section className="crmScreen participantPhotos">
-    <div className="adminPageHeading"><a href={`/workspace/events/${eventId}`}>← {title || "К мероприятию"}</a><div><p className="portalLabel">Галерея мероприятия</p><h2>Фото участников</h2><p>Все фотографии вечера и три победителя.</p></div></div>
+    {!embedded && (<div className="adminPageHeading"><a href={`/workspace/events/${eventId}`}>← {title || "К мероприятию"}</a><div><p className="portalLabel">Галерея мероприятия</p><h2>Фото участников</h2><p>Все фотографии вечера и три победителя.</p></div></div>)}
     <div className="photoUploadPanel photoUploadHero">
       <div className="photoUploadSymbol" aria-hidden="true">↑</div>
       <h3>Добавьте фотографии вечера</h3><p>Загрузите отдельные фото или весь ZIP-архив.<br />Привязывать фотографии к участникам не нужно.</p>

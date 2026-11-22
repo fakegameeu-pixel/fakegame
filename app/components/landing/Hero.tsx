@@ -1,31 +1,33 @@
+import { useI18n } from "../../lib/i18n";
+import { landingCopy } from "./copy";
 import "./HeroBg.css";
 
 type HeroProps = { onReserve: () => void };
 
 export function Hero({ onReserve }: HeroProps) {
+  const { locale } = useI18n();
+  const c = landingCopy[locale].hero;
+  const [first, second, third] = c.title;
   return (
     <section className="fwHero">
       <div className="fwHeroImg" aria-hidden="true" />
       <div className="fwHeroShade" aria-hidden="true" />
       <div className="fwHeroBody">
-        <p className="fwEyebrow fwEyebrowLight">Kāzu vakars pieaugušajiem · Rīga</p>
+        <p className="fwEyebrow fwEyebrowLight">{c.eyebrow}</p>
         <h1>
-          Viņi satiekas
+          {first}
           <br />
-          pirmo reizi.
+          {second}
           <br />
-          <em>Pie altāra.</em>
+          <em>{third}</em>
         </h1>
-        <p className="fwLead">
-          Tu saņem personīgu ielūgumu un iemeslu saposties. Vakariņas, mūzika un sarunas līdz vēlai naktij, viss kā
-          īstās kāzās.
-        </p>
+        <p className="fwLead">{c.lead}</p>
         <div className="fwCtas">
           <button className="fwBtnGold" onClick={onReserve}>
-            Rezervēt vietu →
+            {c.reserve}
           </button>
           <a className="fwBtnGhost" href="#how">
-            Kā tas notiek?
+            {c.how}
           </a>
         </div>
       </div>

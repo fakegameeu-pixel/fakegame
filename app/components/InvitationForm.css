@@ -68,3 +68,41 @@
   text-transform: uppercase;
   color: var(--fw-ink);
 }
+
+/* На телефоне окно занимает почти всю ширину: меньше отступов, крестик внутри экрана. */
+@media (max-width: 960px) {
+  .modalBackdrop {
+    padding: 12px;
+  }
+
+  .modalBackdrop .modal {
+    width: 100%;
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    padding: 40px 22px 26px;
+    box-sizing: border-box;
+  }
+
+  .modalBackdrop .modal h2 {
+    font-size: 40px;
+  }
+
+  .modalBackdrop .close {
+    top: 6px;
+    right: 8px;
+  }
+
+  .modal form {
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .modal form input:not(.honeypot):not([type="checkbox"]) {
+    height: 48px;
+    padding: 0 18px;
+  }
+
+  .modal .primaryButton {
+    height: 50px;
+  }
+}

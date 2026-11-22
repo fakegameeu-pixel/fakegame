@@ -1,0 +1,28 @@
+/* На телефоне сначала идут вопросы, потом блок «Neatradi atbildi?» с контактами. */
+@media (max-width: 960px) {
+  .fwFaq .fwFaqGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .fwFaq .fwFaqGrid > div:first-child {
+    display: contents;
+  }
+
+  .fwFaq .fwQuestions {
+    order: 1;
+    margin-top: 32px;
+  }
+
+  .fwFaq .fwAsk {
+    order: 2;
+    margin-top: 32px;
+  }
+}
+
+/* Ссылка в ответе — отдельной строкой с отступом от текста. */
+.fwFaq .fwQAnswer .fwLink {
+  display: inline-block;
+  margin-top: 14px;
+}

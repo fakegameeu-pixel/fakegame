@@ -1,0 +1,220 @@
+/* Страница выбора роли в стиле лендинга: тёмная винная секция, кремовый текст, золотые акценты, всё по центру. */
+
+.fw.fwChoose {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--fw-ink);
+  color: var(--fw-cream);
+}
+
+.fwChooseWrap {
+  width: 100%;
+  max-width: 560px;
+  padding-top: 96px;
+  padding-bottom: 96px;
+  text-align: left;
+}
+
+.fwChoosePanel {
+  display: grid;
+  justify-items: start;
+}
+
+.fwChooseTitle {
+  font-size: clamp(40px, 9vw, 60px);
+  line-height: 1;
+  margin: 18px 0 28px;
+  color: var(--fw-cream);
+}
+
+.fwChoosePanel .fwChooseTitle {
+  margin: 18px 0 28px;
+}
+
+.fwChoosePanel > p.fwEyebrowLight {
+  margin: 0 0 6px;
+}
+
+.fwChooseTitle em {
+  color: var(--fw-gold);
+}
+
+.fwChooseLead {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(246, 236, 225, 0.75);
+  margin: 0 0 44px;
+  max-width: 440px;
+}
+
+.fwChoosePanel .fwChooseLead {
+  margin: 0 0 40px;
+}
+
+.fwChooseLead strong {
+  color: var(--fw-gold);
+  font-weight: 600;
+}
+
+.fwChoosePanel .fwChooseForm {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  max-width: 420px;
+  justify-items: stretch;
+}
+
+.fwChooseForm label {
+  display: grid;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fw-gold);
+  text-align: left;
+}
+
+.fwChooseForm input:not([type="checkbox"]) {
+  height: 52px;
+  padding: 0 22px;
+  border: 1px solid rgba(246, 236, 225, 0.28);
+  border-radius: 999px;
+  background: transparent;
+  font: 400 15px "Manrope", system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--fw-cream);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.fwChooseForm input::placeholder {
+  color: rgba(246, 236, 225, 0.45);
+}
+
+.fwChooseForm input:not([type="checkbox"]):focus {
+  border-color: var(--fw-gold);
+}
+
+.fwChooseRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.fwChooseConsent {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 10px !important;
+  font-size: 12px !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  line-height: 1.5;
+  color: rgba(246, 236, 225, 0.75) !important;
+}
+
+.fwChooseConsent input {
+  margin-top: 3px;
+  accent-color: var(--fw-gold);
+}
+
+.fwChoosePanel .fwBtnGold {
+  margin-top: 8px;
+  justify-self: start;
+  border: 0;
+  cursor: pointer;
+}
+
+.fwChoosePanel .fwBtnGold:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.fwChooseError {
+  margin: 0;
+  color: #f0b8a8;
+  font-size: 14px;
+}
+
+.fwChooseRoles {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.fwChooseRoles button {
+  width: 100%;
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+  padding: 22px 24px;
+  border: 1px solid rgba(224, 178, 106, 0.3);
+  border-radius: 18px;
+  background: #3a0f1b;
+  color: var(--fw-cream);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.fwChooseRoles button:hover {
+  border-color: var(--fw-gold);
+  transform: translateY(-2px);
+}
+
+.fwChooseRoles strong {
+  font: 500 26px "Cormorant Garamond", serif;
+  color: var(--fw-cream);
+}
+
+.fwChooseRoles span {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(246, 236, 225, 0.7);
+}
+
+.fwChooseRoles em {
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fw-gold);
+}
+
+.fwChooseBackBtn {
+  margin-top: 24px;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--fw-cream);
+  opacity: 0.75;
+  cursor: pointer;
+  padding: 0;
+}
+
+.fwChooseDone .fwBtnGold {
+  margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+  .fwChooseRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Одинаковые роли: стопка и счётчик свободных мест. */
+.fwChooseRoles .fwChooseRoleStacked { position: relative; margin-right: 10px; margin-bottom: 10px; box-shadow: 6px 6px 0 -1px #2a0c12, 6px 6px 0 0 rgba(224, 184, 132, .35), 12px 12px 0 -2px #2a0c12, 12px 12px 0 -1px rgba(224, 184, 132, .35); }
+.fwChooseRoles .fwChooseCount { position: absolute; top: 12px; right: 14px; padding: 3px 9px; border-radius: 999px; background: #8e2637; color: #fff; font-size: 12px; font-weight: 700; font-style: normal; line-height: 1.4; }
+
+/* Кнопка «назад» — сверху панели шага. */
+.fwChoosePanel > .fwChooseBackBtn { display: block; margin: 0 0 22px; }
+
+/* Ссылка на политику в согласии — цвет как у текста, с подчёркиванием. */
+.fwChooseConsent a { color: inherit; text-decoration: underline; }

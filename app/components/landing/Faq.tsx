@@ -1,23 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import { faq, PHONE, WHATSAPP_URL } from "./content";
+import { useI18n } from "../../lib/i18n";
+import { landingCopy } from "./copy";
+import { PHONE, WHATSAPP_URL } from "./content";
+import "./Faq.css";
 
 export function Faq() {
+  const { locale } = useI18n();
+  const c = landingCopy[locale].faq;
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section className="fwSection fwFaq" id="faq">
       <div className="fwWrap fwFaqGrid">
         <div>
-          <p className="fwEyebrow">BUJ · Pirms došanās uz kāzām</p>
+          <p className="fwEyebrow">{c.eyebrow}</p>
           <h2>
-            Biežāk <em>jautātais</em>
+            {c.title} <em>{c.titleAccent}</em>
           </h2>
-          <p className="fwLead fwLeadDark">Viss, ko viesi parasti grib zināt, pirms saņem savu lomu.</p>
+          <p className="fwLead fwLeadDark">{c.lead}</p>
           <div className="fwAsk">
-            <p className="fwAskTitle">Neatradi atbildi?</p>
-            <p className="fwMuted">Uzraksti vai piezvani — atbildēsim pirms tu palūdz.</p>
+            <p className="fwAskTitle">{c.askTitle}</p>
+            <p className="fwMuted">{c.askText}</p>
             <div className="fwCtas">
               <a className="fwBtnGold fwBtnSmall" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
                 WhatsApp →
@@ -29,7 +34,7 @@ export function Faq() {
           </div>
         </div>
         <ul className="fwQuestions">
-          {faq.map((item, i) => {
+          {c.items.map((item, i) => {
             const isOpen = openIndex === i;
             return (
               <li key={item.q} className={`fwQ${isOpen ? " isOpen" : ""}`}>
@@ -40,7 +45,19 @@ export function Faq() {
                     {isOpen ? "×" : "+"}
                   </span>
                 </button>
-                {isOpen && <p className="fwQAnswer">{item.a}</p>}
+                {isOpen && (
+                  <p className="fwQAnswer">
+                    {item.a}
+                    {item.href && item.linkLabel && (
+                      <>
+                        <br />
+                        <a className="fwLink" href={item.href}>
+                          {item.linkLabel}
+                        </a>
+                      </>
+                    )}
+                  </p>
+                )}
               </li>
             );
           })}

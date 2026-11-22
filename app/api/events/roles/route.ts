@@ -31,13 +31,14 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { eventId, title, description, gender, photoPath } = await request.json() as { eventId?: string; title?: string; description?: string; gender?: string; photoPath?: string };
-    if (!eventId || !title?.trim() || !["male", "female", "any"].includes(gender ?? "")) return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+    const { eventId, title, description, gender, photoPath, quantity } = await request.json() as { eventId?: string; title?: string; description?: string; gender?: string; photoPath?: string; quantity?: number };
+    const count = quantity === undefined ? 1 : Number(quantity);
+    if (!eventId || !title?.trim() || !["male", "female", "any"].includes(gender ?? "") || !Number.isInteger(count) || count < 1 || count > 50) return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     const adminDb = await requireAdmin(request);
     const eventRef = adminDb.collection("events").doc(eventId);
-    const roleRef = eventRef.collection("roles").doc();
-    await adminDb.runTransaction(async (transaction) => { transaction.create(roleRef, { title: title.trim(), description: description?.trim() ?? "", gender, ...(photoPath ? { photoPath } : {}), isActive: true, createdAt: new Date() }); transaction.update(eventRef, { roleCount: FieldValue.increment(1) }); });
-    return NextResponse.json({ id: roleRef.id });
+    const roleRefs = Array.from({ length: count }, () => eventRef.collection("roles").doc());
+    await adminDb.runTransaction(async (transaction) => { for (const roleRef of roleRefs) transaction.create(roleRef, { title: title.trim(), description: description?.trim() ?? "", gender, ...(photoPath ? { photoPath } : {}), isActive: true, createdAt: new Date() }); transaction.update(eventRef, { roleCount: FieldValue.increment(count) }); });
+    return NextResponse.json({ id: roleRefs[0].id, ids: roleRefs.map((ref) => ref.id) });
   } catch (error) { return failure(error); }
 }
 

@@ -1,0 +1,8 @@
+/* На телефоне «Uz redzēšanos» и «pie altāra.» должны остаться в двух строках. */
+@media (max-width: 960px) {
+  .fwClose h2 {
+    font-size: clamp(30px, 10vw, 40px);
+    white-space: nowrap;
+    text-align: center;
+  }
+}

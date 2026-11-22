@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useI18n, type Locale } from "../../lib/i18n";
+import { landingCopy } from "./copy";
 import "./HeaderMenu.css";
+import "./HeaderMobile.css";
+import "./HeaderRoleLink.css";
+import "./HeaderAnketa.css";
 
 const LOCALES: { code: Locale; label: string }[] = [
   { code: "lv", label: "LV" },
@@ -10,13 +14,11 @@ const LOCALES: { code: Locale; label: string }[] = [
   { code: "en", label: "EN" },
 ];
 
-const NAV = [
-  { href: "#about", label: "Koncepcija" },
-  { href: "#how", label: "Kā tas notiek" },
-  { href: "#roles", label: "Lomas" },
-  { href: "#gallery", label: "Galerija" },
-  { href: "#faq", label: "BUJ" },
-];
+const anketaLabel: Record<Locale, string> = {
+  lv: "Piedalīties",
+  ru: "Принять участие",
+  en: "Take part",
+};
 
 function ChevronIcon() {
   return (
@@ -26,10 +28,19 @@ function ChevronIcon() {
   );
 }
 
-type HeaderProps = { onReserve: () => void };
+type HeaderProps = { onReserve: () => void; homeHref?: string };
 
-export function Header({ onReserve }: HeaderProps) {
+// homeHref нужен на других страницах: якоря меню ведут на главную.
+export function Header({ onReserve, homeHref = "" }: HeaderProps) {
   const { locale, setLocale } = useI18n();
+  const c = landingCopy[locale].header;
+  const nav = [
+    { href: "#about", label: c.nav.concept },
+    { href: "#how", label: c.nav.how },
+    { href: "#roles", label: c.nav.roles },
+    { href: "#gallery", label: c.nav.gallery },
+    { href: "#faq", label: c.nav.faq },
+  ];
   const [langOpen, setLangOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
@@ -61,7 +72,7 @@ export function Header({ onReserve }: HeaderProps) {
   return (
     <>
       <header className="fwHeader">
-        <a className="fwLogo" href="#top" aria-label="Fake Wedding">
+        <a className="fwLogo" href={`${homeHref}#top`} aria-label="Fake Wedding">
           <svg viewBox="0 0 40 26" aria-hidden="true">
             <circle cx="13" cy="13" r="11" />
             <circle cx="27" cy="13" r="11" />
@@ -70,8 +81,8 @@ export function Header({ onReserve }: HeaderProps) {
         </a>
 
         <div className="fwHeaderRight">
-          <button className="fwBtnGold fwBtnSmall" onClick={onReserve}>
-            Saņemt ielūgumu
+          <button className="fwBtnGold fwBtnSmall fwHeaderCta" onClick={onReserve}>
+            {c.cta}
           </button>
 
           <div className="fwLangSel" ref={langRef}>
@@ -80,14 +91,14 @@ export function Header({ onReserve }: HeaderProps) {
               className="fwLangBtn"
               aria-haspopup="listbox"
               aria-expanded={langOpen}
-              aria-label="Valoda"
+              aria-label={c.language}
               onClick={() => setLangOpen((open) => !open)}
             >
               <span>{locale.toUpperCase()}</span>
               <ChevronIcon />
             </button>
             {langOpen && (
-              <ul className="fwLangMenu" role="listbox" aria-label="Valoda">
+              <ul className="fwLangMenu" role="listbox" aria-label={c.language}>
                 {LOCALES.map((l) => (
                   <li key={l.code}>
                     <button
@@ -110,7 +121,7 @@ export function Header({ onReserve }: HeaderProps) {
           <button
             type="button"
             className="fwBurger"
-            aria-label="Atvērt izvēlni"
+            aria-label={c.openMenu}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(true)}
           >
@@ -124,17 +135,23 @@ export function Header({ onReserve }: HeaderProps) {
       {menuOpen && (
         <>
           <div className="fwDrawerBackdrop" onClick={closeMenu} aria-hidden="true" />
-          <aside className="fwDrawer" aria-label="Navigācija">
-            <button type="button" className="fwDrawerClose" aria-label="Aizvērt izvēlni" onClick={closeMenu}>
+          <aside className="fwDrawer" aria-label={c.navLabel}>
+            <button type="button" className="fwDrawerClose" aria-label={c.closeMenu} onClick={closeMenu}>
               ×
             </button>
             <nav className="fwDrawerNav">
-              {NAV.map((item) => (
-                <a key={item.href} href={item.href} onClick={closeMenu}>
+              {nav.map((item) => (
+                <a key={item.href} href={`${homeHref}${item.href}`} onClick={closeMenu}>
                   {item.label}
                 </a>
               ))}
             </nav>
+            <a className="fwDrawerRole" href="/choose-role" onClick={closeMenu}>
+              {c.chooseRole}
+            </a>
+            <a className="fwBtnGold fwDrawerAnketa" href="/anketa" onClick={closeMenu}>
+              {anketaLabel[locale]}
+            </a>
           </aside>
         </>
       )}

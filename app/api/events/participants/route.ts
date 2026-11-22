@@ -93,11 +93,32 @@ export async function DELETE(request: Request) {
       const participantRef = adminDb.collection("participants").doc(participantId);
       const participant = await transaction.get(participantRef);
       if (!participant.exists || participant.data()?.eventId !== eventId) throw new Error("PARTICIPANT_NOT_FOUND");
-      const participantData = participant.data();
-      const clientId = participantData?.clientId as string | undefined;
+      const participantData = participant.data() ?? {};
+      const clientId = participantData.clientId as string | undefined;
+      const ticketNumber = participantData.ticketNumber as string | undefined;
+      const roleRef = participantData.roleId ? eventRef.collection("roles").doc(String(participantData.roleId)) : undefined;
       const clientRef = clientId ? adminDb.collection("clients").doc(clientId) : undefined;
+      const ticketRef = ticketNumber ? eventRef.collection("tickets").doc(String(ticketNumber)) : undefined;
+      // Сначала все чтения, потом все записи: так требует транзакция Firestore.
+      const role = roleRef ? await transaction.get(roleRef) : undefined;
       const client = clientRef ? await transaction.get(clientRef) : undefined;
-      if (participantData?.roleId) transaction.update(eventRef.collection("roles").doc(participantData.roleId), { isActive: true, assignedAt: null });
+      const ticket = ticketRef ? await transaction.get(ticketRef) : undefined;
+
+      // Роль возвращаем в свободные: снимаем и claimedTicket, иначе выбор роли гостем её не пропустит.
+      if (roleRef && role?.exists) transaction.update(roleRef, { isActive: true, assignedAt: null, claimedTicket: FieldValue.delete() });
+      // Билет, по которому был добавлен участник, тоже снова свободен.
+      if (ticketRef && ticket?.exists) {
+        transaction.update(ticketRef, {
+          status: "free",
+          roleId: FieldValue.delete(),
+          roleTitle: FieldValue.delete(),
+          firstName: FieldValue.delete(),
+          lastName: FieldValue.delete(),
+          email: FieldValue.delete(),
+          phone: FieldValue.delete(),
+          claimedAt: FieldValue.delete(),
+        });
+      }
       transaction.delete(participantRef);
       transaction.update(eventRef, { participantCount: FieldValue.increment(-1), ...(clientId ? { clientIds: FieldValue.arrayRemove(clientId) } : {}) });
       if (clientRef && client?.exists) {
@@ -114,6 +135,9 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Participant delete error", error);
-    return NextResponse.json({ error: "Could not delete participant" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "";
+    if (message === "PARTICIPANT_NOT_FOUND")
+      return NextResponse.json({ error: "Участник не найден в этом мероприятии. Обновите страницу." }, { status: 404 });
+    return NextResponse.json({ error: "Не удалось удалить участника. Попробуйте ещё раз." }, { status: 500 });
   }
 }

@@ -1,6 +1,8 @@
 import { useI18n } from "../../lib/i18n";
+import { landingCopy } from "./copy";
 import { INSTAGRAM_URL, WHATSAPP_URL } from "./content";
 import "./ClosingFooter.css";
+import "./ClosingHeading.css";
 
 function InstagramIcon() {
   return (
@@ -22,14 +24,15 @@ function WhatsAppIcon() {
 }
 
 export function Closing() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const c = landingCopy[locale].closing;
   return (
     <section className="fwClose">
       <div className="fwWrap">
         <h2>
-          Uz redzēšanos
+          {c.title}
           <br />
-          <em>pie altāra.</em>
+          <em>{c.titleAccent}</em>
         </h2>
         <footer className="fwFoot">
           <div className="fwFootIcons">
@@ -42,7 +45,7 @@ export function Closing() {
           </div>
           <div className="fwFootLinks">
             <a href="/privacy-policy">{t.footer.privacy}</a>
-            <span className="fwGold">© Fake Wedding, Rīga</span>
+            <span className="fwGold">{c.copyright}</span>
           </div>
         </footer>
       </div>

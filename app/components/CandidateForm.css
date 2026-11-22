@@ -1,0 +1,151 @@
+.fwChoosePanel .fwChooseForm fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fwChoosePanel .fwChooseForm fieldset legend {
+  margin-bottom: 4px;
+  padding: 0;
+  font-size: 15px;
+  color: #fff;
+}
+
+.fwChoosePanel .fwChooseForm .fwChooseRadio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  cursor: pointer;
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #fff;
+}
+
+.fwChoosePanel .fwChooseForm .fwChooseRadio input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  flex: none;
+  accent-color: #e0b26a;
+}
+
+.fwChoosePanel .fwChooseForm .fwChooseRadio span {
+  color: #fff;
+}
+
+.fwChoosePanel .fwChooseForm .fwVideoField {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.fwChoosePanel .fwChooseForm .fwVideoLabel {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e0b26a;
+}
+
+.fwChoosePanel .fwChooseForm .fwFileButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  border: 1px dashed rgba(224, 178, 106, 0.6);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.fwChoosePanel .fwChooseForm .fwFileButton:hover,
+.fwChoosePanel .fwChooseForm .fwFileButton:focus-within {
+  background: rgba(224, 178, 106, 0.12);
+  border-color: #e0b26a;
+}
+
+.fwChoosePanel .fwChooseForm .fwFileButton input[type="file"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.fwChoosePanel .fwChooseForm .fwFileButtonIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e0b26a;
+  color: #2a0a12;
+  font-size: 13px;
+}
+
+.fwChoosePanel .fwChooseForm .fwFileButtonText {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.fwChoosePanel .fwChooseForm .fwFileButtonHint {
+  flex: none;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.fwChoosePanel .fwChooseForm .fwVideoRules {
+  margin: 16px 0 0;
+  padding: 0 0 0 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.fwChoosePanel .fwChooseForm .fwVideoRules li {
+  margin-bottom: 4px;
+}
+
+/* Длинное имя видео не должно растягивать форму. */
+.fwChoosePanel .fwChooseForm {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 100%;
+}
+
+.fwChoosePanel .fwChooseForm > *,
+.fwChoosePanel .fwChooseForm .fwVideoField,
+.fwChoosePanel .fwChooseForm .fwFileButton {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.fwChoosePanel .fwChooseForm .fwFileButtonText {
+  display: block;
+  max-width: 100%;
+}

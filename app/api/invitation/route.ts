@@ -117,21 +117,14 @@ export async function POST(request: Request) {
         { status: 400 },
       );
 
-    // The public form is also the CRM intake point. Attach the lead to the
-    // latest active event when one exists; otherwise retain it as unassigned.
+    // Заявка с лендинга сохраняется без мероприятия: мероприятие гость выберет
+    // только через форму выбора роли по билету.
     const { adminDb } = getAdminServices();
-    const recentEvents = await adminDb
-      .collection("events")
-      .orderBy("createdAt", "desc")
-      .limit(20)
-      .get();
-    const activeEvent = recentEvents.docs.find((item) => item.data().isActive !== false);
     await adminDb.collection("clients").doc(email).set(
       {
         name,
         email,
         phone,
-        ...(activeEvent ? { eventId: activeEvent.id } : {}),
         source: "invitation",
         updatedAt: new Date(),
         createdAt: new Date(),

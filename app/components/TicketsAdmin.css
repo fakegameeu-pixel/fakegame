@@ -1,0 +1,159 @@
+/* Экран билетов в рабочем пространстве администратора. */
+
+.ticketsScreen {
+  display: grid;
+  gap: 18px;
+}
+
+.ticketsAddForm {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.ticketsAddForm textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #dfc9c1;
+  border-radius: 6px;
+  background: #fffaf6;
+  font: inherit;
+  color: #35141a;
+  resize: vertical;
+}
+
+.ticketsAddForm .crmAction {
+  justify-self: start;
+}
+
+.ticketsNotice {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #7c1728;
+}
+
+.ticketsFilter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.ticketsFilter button {
+  padding: 8px 14px;
+  border: 1px solid #dfc9c1;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 12px;
+  color: #55121d;
+  cursor: pointer;
+}
+
+.ticketsFilter button.active {
+  background: #55121d;
+  border-color: #55121d;
+  color: #fff5f2;
+}
+
+.ticketsTable {
+  display: grid;
+  gap: 0;
+  font-size: 13px;
+}
+
+.ticketsRow {
+  display: grid;
+  grid-template-columns: 110px 1.2fr 1.2fr 1.6fr 1fr 80px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 4px;
+  border-bottom: 1px solid #efdcd5;
+}
+
+.ticketsHead {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8c6c6d;
+  border-bottom-color: #d9b8ad;
+}
+
+.ticketsRow em {
+  color: #8c6c6d;
+}
+
+.ticketsContacts {
+  overflow-wrap: anywhere;
+}
+
+.ticketsDelete {
+  padding: 6px 10px;
+  border: 1px solid #d9b8ad;
+  border-radius: 4px;
+  background: transparent;
+  font-size: 12px;
+  color: #7c1728;
+  cursor: pointer;
+}
+
+.ticketsEmpty {
+  padding: 24px 4px;
+  color: #8c6c6d;
+}
+
+@media (max-width: 900px) {
+  .ticketsRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ticketsHead {
+    display: none;
+  }
+}
+
+.ticketsSeries {
+  grid-template-columns: 1fr 160px;
+  align-items: end;
+}
+
+.ticketsSeries label {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  color: #795b5e;
+}
+
+.ticketsSeries input {
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #dfc9c1;
+  border-radius: 6px;
+  background: #fffaf6;
+  font: inherit;
+  color: #35141a;
+}
+
+.ticketsSeries .ticketsPreview {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 13px;
+  color: #55121d;
+}
+
+.ticketsSeries .crmAction {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.ticketsManualLabel {
+  margin-top: 22px;
+}
+
+.ticketsSectionHeading { margin: 56px 0 22px; color: #55121d; font: 600 40px/1 "Cormorant Garamond", serif; }
+
+.ticketsFilter .ticketsDeleteAll { margin-left: auto; }
+
+.ticketsToolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+.ticketsToolbar .ticketsFilter { margin-bottom: 0; }
+.ticketsDangerAll { border: 1px solid #9c2939; border-radius: 999px; padding: 10px 18px; background: #fff; color: #9c2939; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+.ticketsDangerAll:hover { background: #9c2939; color: #fff; }
+.ticketsDangerAll:disabled { opacity: .5; cursor: default; }

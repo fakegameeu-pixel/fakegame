@@ -12,6 +12,21 @@
   left: calc(var(--left) * 1.5 - 52px);
 }
 
+/* На телефоне колода уменьшается и сдвигается внутрь экрана, чтобы крайние карточки не обрезались. */
+@media (max-width: 960px) {
+  .fwRoleStack {
+    zoom: 0.62;
+  }
+
+  .fwRoleCard {
+    left: calc(var(--left) * 0.6 + 30px);
+  }
+
+  .fwRoleStack:hover .fwRoleCard {
+    left: calc(var(--left) * 0.9 + 20px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fwRoleCard {
     transition: none;

@@ -77,8 +77,28 @@ export async function GET(request: Request) {
     ]);
     const found = new Set(finds.docs.map((item) => item.data().participantId as string));
     const bucket = adminStorage.bucket();
-    const roleDocs = await Promise.all(participants.docs.map((item) => item.data().roleId ? adminDb.collection("events").doc(profile.eventId!).collection("roles").doc(item.data().roleId).get() : Promise.resolve(undefined)));
-    const targets = await Promise.all(participants.docs.map(async (item, index) => {
+    // Собственная запись гостя (билет) не участвует в игре, а её роль показываем отдельно.
+    const guestEmail = identity.email?.trim().toLowerCase();
+    const mine = (profile.clientId ? participants.docs.find((item) => item.data().clientId === profile.clientId) : undefined)
+      ?? participants.docs.find((item) => Boolean(guestEmail) && String(item.data().email ?? "").trim().toLowerCase() === guestEmail);
+    const others = participants.docs.filter((item) => item.id !== mine?.id);
+    const roleDocs = await Promise.all(others.map((item) => item.data().roleId ? adminDb.collection("events").doc(profile.eventId!).collection("roles").doc(item.data().roleId).get() : Promise.resolve(undefined)));
+    // Если запись участника не найдена, роль берём из билета с тем же e-mail.
+    const ticketMatch = !mine && guestEmail ? await adminDb.collection("events").doc(profile.eventId!).collection("tickets").where("email", "==", guestEmail).limit(1).get() : undefined;
+    const ticketData = ticketMatch?.docs[0]?.data();
+    const myRoleId = mine?.data().roleId ?? ticketData?.roleId;
+    const myRoleDoc = myRoleId ? await adminDb.collection("events").doc(profile.eventId!).collection("roles").doc(String(myRoleId)).get() : undefined;
+    let myRole: { title: string; description: string; photoUrl?: string } | null = null;
+    if (myRoleDoc?.exists) {
+      const rolePhotoPath = myRoleDoc.data()?.photoPath as string | undefined;
+      let photoUrl: string | undefined;
+      if (rolePhotoPath) {
+        const [url] = await bucket.file(rolePhotoPath).getSignedUrl({ action: "read", version: "v4", expires: Date.now() + 15 * 60 * 1000 });
+        photoUrl = url;
+      }
+      myRole = { title: String(myRoleDoc.data()?.title ?? ""), description: String(myRoleDoc.data()?.description ?? ""), photoUrl };
+    }
+    const targets = await Promise.all(others.map(async (item, index) => {
       const photoPath = item.data().photoPath as string | undefined;
       const rolePhotoPath = roleDocs[index]?.data()?.photoPath as string | undefined;
       let photoUrl: string | undefined;
@@ -88,7 +108,7 @@ export async function GET(request: Request) {
       }
       return { id: item.id, photoUrl, found: found.has(item.id) };
     }));
-    return NextResponse.json({ event: { title: event.data()?.title ?? "Fake Wedding", date: event.data()?.date, location: event.data()?.location }, targets });
+    return NextResponse.json({ event: { title: event.data()?.title ?? "Fake Wedding", date: event.data()?.date, location: event.data()?.location }, guestName: String(mine?.data().name ?? (ticketData ? `${ticketData.firstName ?? ""} ${ticketData.lastName ?? ""}`.trim() : "") ?? profile.name ?? identity.name ?? ""), myRole, targets });
   } catch (error) {
     console.error("Guest game load error", error);
     return failure(error);

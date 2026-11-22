@@ -1,31 +1,34 @@
 import type { CSSProperties } from "react";
-import { roles } from "./content";
+import { useI18n } from "../../lib/i18n";
+import { landingCopy } from "./copy";
+import { roleMeta } from "./content";
 import "./RoleStack.css";
 
 export function Roles() {
+  const { locale } = useI18n();
+  const c = landingCopy[locale].roles;
   return (
     <section className="fwRoles" id="roles">
       <div className="fwWrap fwRolesGrid">
         <div>
-          <p className="fwEyebrow fwEyebrowLight">Viesi</p>
+          <p className="fwEyebrow fwEyebrowLight">{c.eyebrow}</p>
           <h2>
-            Kas būsi tu <em>šovakar?</em>
+            {c.title} <em>{c.titleAccent}</em>
           </h2>
-          <p className="fwLead">
-            Katram viesim sava kārts ar vārdu, pagātni un vienu noslēpumu. Īsto stāstu tu uzzināsi
-            pirms vakara.
-          </p>
+          <p className="fwLead">{c.lead}</p>
         </div>
         <div className="fwRoleStack" aria-hidden="true">
-          {roles.map((r) => (
+          {roleMeta.map((meta, i) => (
             <div
-              key={r.tag}
-              className={`fwRoleCard fwRoleCard--${r.tone}`}
-              style={{ "--rot": r.rot, "--left": r.left } as CSSProperties}
+              key={c.items[i].tag}
+              className={`fwRoleCard fwRoleCard--${meta.tone}`}
+              style={{ "--rot": meta.rot, "--left": meta.left } as CSSProperties}
             >
-              <span className="fwRoleTag">{r.tag}</span>
-              <p className="fwRoleTitle">{r.title}</p>
-              <span className="fwRoleSecret">Noslēpums: {r.secret}</span>
+              <span className="fwRoleTag">{c.items[i].tag}</span>
+              <p className="fwRoleTitle">{c.items[i].title}</p>
+              <span className="fwRoleSecret">
+                {c.secret} {c.items[i].secret}
+              </span>
             </div>
           ))}
         </div>
