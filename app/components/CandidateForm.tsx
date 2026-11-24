@@ -256,6 +256,9 @@ export function CandidateForm() {
         return;
       }
     }
+    // Проверка выше гарантирует наличие файла; явная проверка нужна TypeScript.
+    if (!file) return;
+    const videoFile = file;
     setLoading(true);
     try {
       setStatus(t.uploading);
@@ -263,8 +266,8 @@ export function CandidateForm() {
       try {
         upload = await fetch("/api/candidates/video", {
           method: "POST",
-          headers: { "Content-Type": file.type, "X-File-Size": String(file.size) },
-          body: file,
+          headers: { "Content-Type": videoFile.type, "X-File-Size": String(videoFile.size) },
+          body: videoFile,
         });
       } catch (uploadError) {
         console.error("Video upload failed", uploadError);
