@@ -26,3 +26,12 @@
   display: inline-block;
   margin-top: 14px;
 }
+
+/* Открытый блок вопроса — розовый фон. */
+.fwFaq .fwQuestions .fwQ.isOpen {
+  background: #f4cdd2;
+}
+
+.fwFaq .fwQuestions .fwQ.isOpen button {
+  background: transparent;
+}

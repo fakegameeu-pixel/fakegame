@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import "./fakeWedding.css";
 import "./landing/Buttons.css";
 import "./ChooseRole.css";
@@ -14,6 +14,7 @@ const copy = {
   lv: {
     eyebrow: "Anketa",
     title: ["Līgavainis", "vai līgava."],
+    intro: "Šī anketa ir pieteikums piedalīties Fake Wedding vakarā kā līgavainim vai līgavai. Aizpildi datus un pievieno īsu video vizītkarti, lai mēs varētu tevi iepazīt.",
     roleLegend: "Kas tu vēlies būt?",
     roleGroom: "Līgavainis",
     roleBride: "Līgava",
@@ -34,6 +35,9 @@ const copy = {
     consentLink: "personas datu apstrādei",
     consentAfter: ".",
     submit: "Nosūtīt anketu →",
+    next: "Tālāk →",
+    back: "← Atpakaļ",
+    stepOf: (n: number) => `Solis ${n} no 3`,
     sending: "Sūtām…",
     uploading: "Augšupielādējam video. Tas var aizņemt dažas minūtes…",
     saving: "Saglabājam anketu…",
@@ -62,6 +66,7 @@ const copy = {
   ru: {
     eyebrow: "Анкета",
     title: ["Жених", "или невеста."],
+    intro: "Эта анкета — заявка на участие в вечере Fake Wedding в роли жениха или невесты. Заполни данные и загрузи короткую видеовизитку, чтобы мы могли тебя узнать.",
     roleLegend: "Кем хочешь стать?",
     roleGroom: "Жених",
     roleBride: "Невеста",
@@ -82,6 +87,9 @@ const copy = {
     consentLink: "персональных данных",
     consentAfter: ".",
     submit: "Отправить анкету →",
+    next: "Далее →",
+    back: "← Назад",
+    stepOf: (n: number) => `Шаг ${n} из 3`,
     sending: "Отправляем…",
     uploading: "Загружаем видео. Это может занять несколько минут…",
     saving: "Сохраняем анкету…",
@@ -110,6 +118,7 @@ const copy = {
   en: {
     eyebrow: "Application",
     title: ["Groom", "or bride."],
+    intro: "This form is an application to take part in the Fake Wedding evening as the groom or bride. Fill in your details and upload a short video intro so we can get to know you.",
     roleLegend: "Who would you like to be?",
     roleGroom: "Groom",
     roleBride: "Bride",
@@ -130,6 +139,9 @@ const copy = {
     consentLink: "personal data",
     consentAfter: ".",
     submit: "Send application →",
+    next: "Next →",
+    back: "← Back",
+    stepOf: (n: number) => `Step ${n} of 3`,
     sending: "Sending…",
     uploading: "Uploading the video. This may take a few minutes…",
     saving: "Saving your application…",
@@ -163,6 +175,8 @@ export function CandidateForm() {
   const { locale } = useI18n();
   const t: Copy = copy[locale] ?? copy.lv;
   const [file, setFile] = useState<File>();
+  const [step, setStep] = useState(0);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
@@ -184,15 +198,64 @@ export function CandidateForm() {
     setFile(picked);
   }
 
+  function validateStep(index: number, form: FormData, hasFile: boolean, agreed: boolean): keyof Copy["errors"] | null {
+    const text = (name: string) => String(form.get(name) ?? "").trim();
+    if (index === 0) {
+      return text("role") ? null : "ROLE_REQUIRED";
+    }
+    if (index === 1) {
+      if (!text("firstName") || !text("lastName")) return "NAME_REQUIRED";
+      const phone = text("phone").replace(/[\s()-]/g, "");
+      if (!/^\+?\d{8,15}$/.test(phone)) return "PHONE_INVALID";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(text("email"))) return "EMAIL_INVALID";
+      return null;
+    }
+    // Шаг 3: дата рождения, параметры, видео и согласие.
+    const birth = new Date(text("birthDate"));
+    const adultFrom = new Date();
+    adultFrom.setFullYear(adultFrom.getFullYear() - 18);
+    if (!text("birthDate") || Number.isNaN(birth.getTime()) || birth > adultFrom) return "BIRTH_DATE_INVALID";
+    const height = Number(text("height"));
+    if (!text("height") || height < 100 || height > 250) return "HEIGHT_INVALID";
+    const weight = Number(text("weight"));
+    if (!text("weight") || weight < 30 || weight > 250) return "WEIGHT_INVALID";
+    const shoe = Number(text("shoeSize"));
+    if (!text("shoeSize") || shoe < 20 || shoe > 60) return "SHOE_INVALID";
+    if (!hasFile) return "NO_VIDEO";
+    if (!agreed) return "CONSENT_REQUIRED";
+    return null;
+  }
+
+  function goNext() {
+    const formEl = stepRefs.current[step]?.closest("form");
+    if (!formEl) return;
+    const code = validateStep(step, new FormData(formEl), !!file, consent);
+    if (code) {
+      setError(t.errors[code]);
+      return;
+    }
+    setError("");
+    setStep((current) => Math.min(current + 1, 2));
+  }
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
-    if (!file) {
-      setError(t.errors.NO_VIDEO);
+    // Enter на первых шагах только переводит на следующий шаг.
+    if (step < 2) {
+      goNext();
       return;
     }
     // Читаем поля до первого await: после него event.currentTarget уже недоступен.
     const form = new FormData(event.currentTarget);
+    for (const index of [0, 1, 2]) {
+      const code = validateStep(index, form, !!file, consent);
+      if (code) {
+        setStep(index);
+        setError(t.errors[code]);
+        return;
+      }
+    }
     setLoading(true);
     try {
       setStatus(t.uploading);
@@ -259,9 +322,14 @@ export function CandidateForm() {
           </section>
         ) : (
           <section className="fwChoosePanel">
-            <p className="fwEyebrowLight">{t.eyebrow}</p>
+            <div className="fwStepHead">
+              <p className="fwEyebrowLight">{t.eyebrow}</p>
+              <span className="fwStepText">{t.stepOf(step + 1)}</span>
+            </div>
             <h1 className="fwChooseTitle">{t.title[0]} <em>{t.title[1]}</em></h1>
-            <form className="fwChooseForm" onSubmit={submit}>
+            <p className="fwChooseLead">{t.intro}</p>
+            <form className="fwChooseForm" onSubmit={submit} noValidate>
+              <div ref={(el) => { stepRefs.current[0] = el; }} hidden={step !== 0}>
               <fieldset>
                 <legend>{t.roleLegend}</legend>
                 <label className="fwChooseRadio">
@@ -273,7 +341,9 @@ export function CandidateForm() {
                   <span>{t.roleBride}</span>
                 </label>
               </fieldset>
+              </div>
 
+              <div ref={(el) => { stepRefs.current[1] = el; }} hidden={step !== 1}>
               <div className="fwChooseRow">
                 <label>
                   {t.firstName}
@@ -296,6 +366,9 @@ export function CandidateForm() {
                 </label>
               </div>
 
+              </div>
+
+              <div ref={(el) => { stepRefs.current[2] = el; }} hidden={step !== 2}>
               <label>
                 {t.birthDate}
                 <input name="birthDate" type="date" required autoComplete="bday" />
@@ -318,7 +391,7 @@ export function CandidateForm() {
               </label>
 
               <div className="fwVideoField">
-                <span className="fwVideoLabel">{t.videoLabel}</span>
+                <span className="fwCandidateVideoTitle">{t.videoLabel}</span>
                 <label className="fwFileButton">
                   <input type="file" accept="video/mp4,video/quicktime,video/webm" onChange={selectVideo} required />
                   <span className="fwFileButtonIcon" aria-hidden="true">▶</span>
@@ -339,11 +412,26 @@ export function CandidateForm() {
                 </span>
               </label>
 
+              </div>
+
               {status && <p className="fwChooseLead">{status}</p>}
               {error && <p className="fwChooseError" role="alert">{error}</p>}
-              <button className="fwBtnGold" disabled={loading || !consent}>
-                {loading ? t.sending : t.submit}
-              </button>
+              <div className="fwChooseNav">
+                {step > 0 && (
+                  <button type="button" className="fwBtnGhostDark" disabled={loading} onClick={() => setStep((current) => current - 1)}>
+                    {t.back}
+                  </button>
+                )}
+                {step < 2 ? (
+                  <button type="button" className="fwBtnGold" onClick={goNext}>
+                    {t.next}
+                  </button>
+                ) : (
+                  <button className="fwBtnGold" disabled={loading || !consent}>
+                    {loading ? t.sending : t.submit}
+                  </button>
+                )}
+              </div>
             </form>
           </section>
         )}

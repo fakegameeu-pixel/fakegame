@@ -779,10 +779,6 @@
   transition: background 0.2s ease;
 }
 
-.fwQ.isOpen {
-  background: #efc0c8;
-}
-
 .fwQ button {
   width: 100%;
   display: flex;

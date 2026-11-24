@@ -48,7 +48,7 @@
   margin-bottom: 20px;
 }
 
-.fwChoosePanel .fwChooseForm .fwVideoLabel {
+.fwChoosePanel .fwChooseForm .fwCandidateVideoTitle {
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -148,4 +148,121 @@
 .fwChoosePanel .fwChooseForm .fwFileButtonText {
   display: block;
   max-width: 100%;
+}
+
+/* Варианты «Жених / Невеста» — отдельные блоки-карточки. */
+.fwChoosePanel .fwChooseForm .fwChooseRadio {
+  padding: 16px 20px;
+  border: 1px solid rgba(246, 236, 225, 0.28);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.fwChoosePanel .fwChooseForm .fwChooseRadio:hover {
+  border-color: rgba(224, 178, 106, 0.6);
+}
+
+.fwChoosePanel .fwChooseForm .fwChooseRadio:has(input:checked) {
+  border-color: #e0b26a;
+  background: rgba(224, 178, 106, 0.12);
+}
+
+/* Блоки «Жених / Невеста» стоят в ряд, без кружков выбора. */
+.fwChoosePanel .fwChooseForm fieldset:has(.fwChooseRadio) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.fwChoosePanel .fwChooseForm fieldset:has(.fwChooseRadio) legend {
+  grid-column: 1 / -1;
+}
+
+.fwChoosePanel .fwChooseForm .fwChooseRadio {
+  position: relative;
+  justify-content: center;
+  text-align: center;
+  font-size: 17px;
+}
+
+.fwChoosePanel .fwChooseForm .fwChooseRadio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+/* Кнопки «Назад» и «Далее» на шагах анкеты. */
+.fwChoosePanel .fwChooseForm .fwChooseNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Шаги анкеты — сами сетки с отступами, чтобы подписи не залезали на поля. */
+.fwChoosePanel .fwChooseForm > div:not([hidden]):not(.fwChooseNav) {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+
+.fwChoosePanel .fwChooseForm > div[hidden] {
+  display: none;
+}
+
+/* Кнопка «Назад» — только контур, без заливки. */
+.fwChoosePanel .fwChooseForm .fwChooseNav .fwBtnGhostDark {
+  background: transparent;
+  border: 1px solid #e0b26a;
+  color: #e0b26a;
+}
+
+/* Индикатор шагов анкеты. */
+.fwChoosePanel .fwChooseForm .fwSteps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fwChoosePanel .fwChooseForm .fwStep {
+  display: block;
+  width: 48px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.fwChoosePanel .fwChooseForm .fwStep.isActive {
+  background: #e0b26a;
+}
+
+.fwChoosePanel .fwChooseForm .fwStepText {
+  margin-left: 8px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Счётчик шагов — справа в строке заголовка. */
+.fwChoosePanel .fwStepHead {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.fwChoosePanel .fwStepHead .fwStepText {
+  margin-left: 0;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #e0b26a;
 }

@@ -4,7 +4,7 @@ import { I18nProvider } from "../lib/i18n";
 
 export const metadata: Metadata = {
   title: "Izvēlies lomu",
-  description: "Izvēlies savu lomu Fake Wedding pasākumā ar biļetes numuru.",
+  description: "Ievadi biļetes numuru un izvēlies brīvo lomu Fake Wedding pasākumā.",
   robots: { index: false, follow: false },
 };
 

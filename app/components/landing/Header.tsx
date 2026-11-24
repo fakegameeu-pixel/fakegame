@@ -15,9 +15,9 @@ const LOCALES: { code: Locale; label: string }[] = [
 ];
 
 const anketaLabel: Record<Locale, string> = {
-  lv: "Piedalīties",
-  ru: "Принять участие",
-  en: "Take part",
+  lv: "Spēlē galveno lomu",
+  ru: "Сыграть главную роль",
+  en: "Play the lead role",
 };
 
 function ChevronIcon() {
@@ -145,12 +145,12 @@ export function Header({ onReserve, homeHref = "" }: HeaderProps) {
                   {item.label}
                 </a>
               ))}
+              <a href="/anketa" onClick={closeMenu}>
+                {anketaLabel[locale]}
+              </a>
             </nav>
             <a className="fwDrawerRole" href="/choose-role" onClick={closeMenu}>
               {c.chooseRole}
-            </a>
-            <a className="fwBtnGold fwDrawerAnketa" href="/anketa" onClick={closeMenu}>
-              {anketaLabel[locale]}
             </a>
           </aside>
         </>

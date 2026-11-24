@@ -1,6 +1,1 @@
-.fwDrawer .fwDrawerAnketa {
-  display: block;
-  margin: 24px;
-  text-align: center;
-  text-decoration: none;
-}
+/* Пункт «Spēlē galveno lomu» стилизуется как обычная ссылка меню (.fwDrawerRole). */

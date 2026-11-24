@@ -11,7 +11,7 @@
 
 .fwChooseWrap {
   width: 100%;
-  max-width: 560px;
+  max-width: 740px;
   padding-top: 96px;
   padding-bottom: 96px;
   text-align: left;
@@ -218,3 +218,88 @@
 
 /* Ссылка на политику в согласии — цвет как у текста, с подчёркиванием. */
 .fwChooseConsent a { color: inherit; text-decoration: underline; }
+
+/* Роли — в две колонки на широком экране. */
+@media (min-width: 700px) {
+  .fwChooseRoles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Кнопка «назад» и номер шага — в одной строке, по краям. */
+.fwChoosePanel:has(> .fwChooseBackBtn) {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 16px;
+}
+
+.fwChoosePanel > .fwChooseBackBtn {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+  margin: 0;
+}
+
+.fwChoosePanel > .fwChooseBackBtn + .fwEyebrowLight {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: start;
+  margin: 8px 0 0;
+}
+
+.fwChoosePanel:has(> .fwChooseBackBtn) > :not(.fwChooseBackBtn):not(.fwEyebrowLight) {
+  grid-column: 1 / -1;
+}
+
+/* Общий .fwWrap задавал ширину 1200px и перебивал .fwChooseWrap — ставим ширину явно. */
+.fwWrap.fwChooseWrap {
+  max-width: 740px;
+}
+
+/* Заголовок, шаги, описание и роли — в одной колонке одной ширины. */
+.fwWrap.fwChooseWrap {
+  max-width: 680px;
+}
+
+.fwChoosePanel {
+  width: 100%;
+  justify-items: stretch;
+}
+
+.fwChoosePanel .fwChooseRoles {
+  justify-self: stretch;
+  width: 100%;
+}
+
+/* Перебиваем старую ширину панели (71%) из кэшированного CSS: повышенная специфичность, чтобы не зависеть от порядка подключения. */
+.fwChooseWrap .fwChoosePanel.fwChoosePanel {
+  width: 100%;
+}
+
+/* Заголовок ближе к строке «назад» и номеру шага. */
+.fwChoosePanel:has(> .fwChooseBackBtn) > .fwChooseTitle {
+  margin-top: 0;
+}
+
+/* Карточки ролей одинаковой высоты; длинный текст сокращается многоточием. */
+.fwChooseRoles > li {
+  display: flex;
+}
+
+.fwChooseRoles > li > button {
+  height: 100%;
+}
+
+.fwChooseRoles strong {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fwChooseRoles span:not(.fwChooseCount) {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
