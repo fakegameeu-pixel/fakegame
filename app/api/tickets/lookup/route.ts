@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminServices } from "../../../lib/firebase-admin";
 import { findActiveEventId, isFreeRole, isValidTicket, normalizeTicket } from "../../../lib/tickets";
+import { sanitizeTranslations } from "../../../lib/roleText";
 
 export const runtime = "nodejs";
 
@@ -23,7 +24,12 @@ export async function POST(request: Request) {
     const roles = await eventRef.collection("roles").get();
     const freeRoles = roles.docs
       .filter((role) => isFreeRole(role.data()))
-      .map((role) => ({ id: role.id, title: String(role.data().title ?? ""), description: String(role.data().description ?? ""), translations: role.data().translations ?? {} }))
+      .map((role) => ({
+        id: role.id,
+        title: String(role.data().title ?? ""),
+        description: String(role.data().description ?? ""),
+        translations: sanitizeTranslations(role.data().translations),
+      }))
       .sort((a, b) => a.title.localeCompare(b.title, "lv"));
 
     return NextResponse.json({ number: ticketNumber, roles: freeRoles });

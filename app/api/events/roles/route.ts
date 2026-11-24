@@ -1,6 +1,7 @@
 import { FieldValue } from "firebase-admin/firestore";
 import { NextResponse } from "next/server";
 import { getAdminServices } from "../../../lib/firebase-admin";
+import { sanitizeTranslations } from "../../../lib/roleText";
 
 export const runtime = "nodejs";
 
@@ -31,23 +32,23 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const { eventId, title, description, gender, photoPath, quantity } = await request.json() as { eventId?: string; title?: string; description?: string; gender?: string; photoPath?: string; quantity?: number };
+    const { eventId, title, description, gender, photoPath, quantity, translations } = await request.json() as { eventId?: string; title?: string; description?: string; gender?: string; photoPath?: string; quantity?: number; translations?: unknown };
     const count = quantity === undefined ? 1 : Number(quantity);
     if (!eventId || !title?.trim() || !["male", "female", "any"].includes(gender ?? "") || !Number.isInteger(count) || count < 1 || count > 50) return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     const adminDb = await requireAdmin(request);
     const eventRef = adminDb.collection("events").doc(eventId);
     const roleRefs = Array.from({ length: count }, () => eventRef.collection("roles").doc());
-    await adminDb.runTransaction(async (transaction) => { for (const roleRef of roleRefs) transaction.create(roleRef, { title: title.trim(), description: description?.trim() ?? "", gender, ...(photoPath ? { photoPath } : {}), isActive: true, createdAt: new Date() }); transaction.update(eventRef, { roleCount: FieldValue.increment(count) }); });
+    await adminDb.runTransaction(async (transaction) => { for (const roleRef of roleRefs) transaction.create(roleRef, { title: title.trim(), description: description?.trim() ?? "", translations: sanitizeTranslations(translations), gender, ...(photoPath ? { photoPath } : {}), isActive: true, createdAt: new Date() }); transaction.update(eventRef, { roleCount: FieldValue.increment(count) }); });
     return NextResponse.json({ id: roleRefs[0].id, ids: roleRefs.map((ref) => ref.id) });
   } catch (error) { return failure(error); }
 }
 
 export async function PATCH(request: Request) {
   try {
-    const { eventId, roleId, title, description, gender, photoPath } = await request.json() as { eventId?: string; roleId?: string; title?: string; description?: string; gender?: string; photoPath?: string };
+    const { eventId, roleId, title, description, gender, photoPath, translations } = await request.json() as { eventId?: string; roleId?: string; title?: string; description?: string; gender?: string; photoPath?: string; translations?: unknown };
     if (!eventId || !roleId || !title?.trim() || !["male", "female", "any"].includes(gender ?? "")) return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     const adminDb = await requireAdmin(request);
-    await adminDb.collection("events").doc(eventId).collection("roles").doc(roleId).update({ title: title.trim(), description: description?.trim() ?? "", gender, ...(photoPath ? { photoPath } : {}) });
+    await adminDb.collection("events").doc(eventId).collection("roles").doc(roleId).update({ title: title.trim(), description: description?.trim() ?? "", ...(translations !== undefined ? { translations: sanitizeTranslations(translations) } : {}), gender, ...(photoPath ? { photoPath } : {}) });
     return NextResponse.json({ ok: true });
   } catch (error) { return failure(error); }
 }

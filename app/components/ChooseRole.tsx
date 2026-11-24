@@ -5,58 +5,156 @@ import "./fakeWedding.css";
 import "./landing/Buttons.css";
 import "./ChooseRole.css";
 import { Header } from "./landing/Header";
-import { useI18n } from "../lib/i18n";
+import { InvitationModal } from "./InvitationModal";
+import { type Locale, useI18n } from "../lib/i18n";
+import { localizeRole, type RoleTranslations } from "../lib/roleText";
 
-type Role = { id: string; title: string; description: string };
-type ServerRole = Role & { translations?: Partial<Record<"lv" | "ru" | "en", { title: string; description: string }>> };
-
-function localizeRole(role: ServerRole, locale: "lv" | "ru" | "en"): Role {
-  const translated = role.translations?.[locale];
-  return { id: role.id, title: translated?.title || role.title, description: translated?.description || role.description };
-}
+type Role = { id: string; title: string; description: string; translations?: RoleTranslations };
 type Step = "ticket" | "role" | "contacts" | "done";
-type RoleGroup = { key: string; title: string; description: string; roles: Role[] };
 
 const copy = {
   lv: {
-    ticket: { step: "1. solis", title: ["Ievadi savu", "biļetes numuru."], lead: "Numuru atradīsi savā biļetē vai ielūgumā.", label: "Biļetes numurs", placeholder: "Piem., FW-0001", next: "Turpināt →", checking: "Pārbaudām…" },
-    role: { step: "2. solis", title: ["Izvēlies", "lomu."], lead: "Rādam tikai brīvās lomas. Pēc izvēles loma tiks piesaistīta tavai biļetei.", choose: "Izvēlēties →", free: (n: number) => `Brīvas: ${n}`, allTaken: "Visas lomas šobrīd ir aizņemtas. Uzraksti mums, un palīdzēsim.", back: "← Mainīt biļeti" },
-    contacts: { step: "3. solis", title: ["Tavi", "kontakti."], roleLabel: "Loma:", lead: "Pēc saglabāšanas to vairs nevarēs mainīt.", first: "Vārds", last: "Uzvārds", email: "E-pasts", phone: "Tālrunis", consentBefore: "Piekrītu ", consentLink: "personas datu apstrādei", consentAfter: ".", save: "Saglabāt izvēli →", saving: "Saglabājam…", back: "← Atpakaļ pie lomām" },
-    done: { eyebrow: "Gatavs", title: ["Loma ir", "tava."], lead: (title: string) => `Tu izvēlējies lomu «${title}». Pirms vakara sazināsimies ar tevi pa e-pastu vai tālruni.`, mailSent: (email: string) => `Vēstule ar lomu nosūtīta uz ${email}.`, mailNotSent: "Vēstule ar lomu vēl nav nosūtīta. Ieiet viesu kabinetā var lapā /guest, ievadot šo e-pastu.", again: "Izvēlēties vēl vienu lomu" },
-    errors: { INVALID_TICKET: "Ievadi derīgu biļetes numuru.", TICKET_NOT_FOUND: "Biļetes numurs nav atrasts.", EVENT_INACTIVE: "Pasākums šobrīd nav aktīvs.", ROLE_TAKEN: "Šī loma jau ir aizņemta. Izvēlies citu.", TICKET_CLAIMED: "Šī biļete jau ir izvēlējusies lomu.", NAME_REQUIRED: "Ievadi vārdu un uzvārdu.", EMAIL_INVALID: "Ievadi derīgu e-pastu.", PHONE_INVALID: "Ievadi derīgu tālruni.", MISSING_FIELDS: "Trūkst biļetes vai lomas.", LOOKUP_FAILED: "Neizdevās pārbaudīt biļeti. Mēģini vēlreiz.", SAVE_FAILED: "Neizdevās saglabāt izvēli. Mēģini vēlreiz." },
+    ticketEyebrow: "1. solis",
+    ticketTitle: "Ievadi savu",
+    ticketAccent: "biļetes numuru.",
+    ticketLead: "Numuru atradīsi savā biļetē vai ielūgumā.",
+    ticketLabel: "Biļetes numurs",
+    ticketPlaceholder: "Piem., FW-0001",
+    continue: "Turpināt →",
+    checking: "Pārbaudām…",
+    roleEyebrow: "2. solis",
+    roleTitle: "Izvēlies",
+    roleAccent: "lomu.",
+    roleLead: "Rādam tikai brīvās lomas. Pēc izvēles loma tiks piesaistīta tavai biļetei.",
+    chooseRole: "Izvēlēties →",
+    noRoles: "Visas lomas šobrīd ir aizņemtas. Uzraksti mums, un palīdzēsim.",
+    changeTicket: "← Mainīt biļeti",
+    contactsEyebrow: "3. solis",
+    contactsTitle: "Tavi",
+    contactsAccent: "kontakti.",
+    rolePrefix: "Loma: ",
+    roleSuffix: ". Pēc saglabāšanas to vairs nevarēs mainīt.",
+    firstName: "Vārds",
+    lastName: "Uzvārds",
+    email: "E-pasts",
+    phone: "Tālrunis",
+    consent: "Piekrītu personas datu apstrādei.",
+    save: "Saglabāt izvēli →",
+    saving: "Saglabājam…",
+    backToRoles: "← Atpakaļ pie lomām",
+    doneEyebrow: "Gatavs",
+    doneTitle: "Loma ir",
+    doneAccent: "tava.",
+    doneLead: (role: string) => `Tu izvēlējies lomu «${role}». Pirms vakara sazināsimies ar tevi pa e-pastu vai tālruni.`,
+    backHome: "Atpakaļ uz sākumu",
+    errors: {
+      lookup: "Neizdevās pārbaudīt biļeti.",
+      save: "Neizdevās saglabāt izvēli. Mēģini vēlreiz.",
+      invalidTicket: "Ievadi pareizu biļetes numuru.",
+      ticketNotFound: "Biļetes numurs nav atrasts.",
+      eventInactive: "Pasākums šobrīd nav aktīvs.",
+      roleTaken: "Šī loma jau ir aizņemta. Izvēlies citu.",
+      ticketClaimed: "Šī biļete jau ir izvēlējusies lomu.",
+    },
   },
   ru: {
-    ticket: { step: "1 шаг", title: ["Введи номер своего", "билета."], lead: "Номер найдёшь на своём билете или в приглашении.", label: "Номер билета", placeholder: "Например, FW-0001", next: "Продолжить →", checking: "Проверяем…" },
-    role: { step: "2 шаг", title: ["Выбери", "роль."], lead: "Показываем только свободные роли. После выбора роль будет закреплена за твоим билетом.", choose: "Выбрать →", free: (n: number) => `Свободно: ${n}`, allTaken: "Все роли сейчас заняты. Напиши нам, и мы поможем.", back: "← Сменить билет" },
-    contacts: { step: "3 шаг", title: ["Твои", "контакты."], roleLabel: "Роль:", lead: "После сохранения её нельзя будет изменить.", first: "Имя", last: "Фамилия", email: "E-mail", phone: "Телефон", consentBefore: "Согласен на обработку ", consentLink: "персональных данных", consentAfter: ".", save: "Сохранить выбор →", saving: "Сохраняем…", back: "← Назад к ролям" },
-    done: { eyebrow: "Готово", title: ["Роль", "твоя."], lead: (title: string) => `Ты выбрал роль «${title}». Перед вечером мы свяжемся с тобой по e-mail или телефону.`, mailSent: (email: string) => `Письмо с ролью отправлено на ${email}.`, mailNotSent: "Письмо с ролью пока не отправилось. Войти в гостевой кабинет можно на странице /guest, введя этот e-mail.", again: "Выбрать ещё роль" },
-    errors: { INVALID_TICKET: "Введите корректный номер билета.", TICKET_NOT_FOUND: "Номер билета не найден.", EVENT_INACTIVE: "Мероприятие сейчас не активно.", ROLE_TAKEN: "Эта роль уже занята. Выбери другую.", TICKET_CLAIMED: "Этот билет уже выбрал роль.", NAME_REQUIRED: "Введите имя и фамилию.", EMAIL_INVALID: "Введите корректный e-mail.", PHONE_INVALID: "Введите корректный телефон.", MISSING_FIELDS: "Не хватает номера билета или роли.", LOOKUP_FAILED: "Не удалось проверить билет. Попробуйте ещё раз.", SAVE_FAILED: "Не удалось сохранить выбор. Попробуй ещё раз." },
+    ticketEyebrow: "1. шаг",
+    ticketTitle: "Введи свой",
+    ticketAccent: "номер билета.",
+    ticketLead: "Номер найдёшь на своём билете или приглашении.",
+    ticketLabel: "Номер билета",
+    ticketPlaceholder: "Например, FW-0001",
+    continue: "Продолжить →",
+    checking: "Проверяем…",
+    roleEyebrow: "2. шаг",
+    roleTitle: "Выбери",
+    roleAccent: "роль.",
+    roleLead: "Показываем только свободные роли. После выбора роль будет закреплена за твоим билетом.",
+    chooseRole: "Выбрать →",
+    noRoles: "Все роли сейчас заняты. Напиши нам, и мы поможем.",
+    changeTicket: "← Сменить билет",
+    contactsEyebrow: "3. шаг",
+    contactsTitle: "Твои",
+    contactsAccent: "контакты.",
+    rolePrefix: "Роль: ",
+    roleSuffix: ". После сохранения её нельзя будет изменить.",
+    firstName: "Имя",
+    lastName: "Фамилия",
+    email: "E-mail",
+    phone: "Телефон",
+    consent: "Согласен на обработку персональных данных.",
+    save: "Сохранить выбор →",
+    saving: "Сохраняем…",
+    backToRoles: "← Назад к ролям",
+    doneEyebrow: "Готово",
+    doneTitle: "Роль —",
+    doneAccent: "твоя.",
+    doneLead: (role: string) => `Ты выбрал роль «${role}». Перед вечером мы свяжемся с тобой по e-mail или телефону.`,
+    backHome: "Назад на главную",
+    errors: {
+      lookup: "Не удалось проверить билет.",
+      save: "Не удалось сохранить выбор. Попробуй ещё раз.",
+      invalidTicket: "Введи корректный номер билета.",
+      ticketNotFound: "Номер билета не найден.",
+      eventInactive: "Мероприятие сейчас не активно.",
+      roleTaken: "Эта роль уже занята. Выбери другую.",
+      ticketClaimed: "Этот билет уже выбрал роль.",
+    },
   },
   en: {
-    ticket: { step: "Step 1", title: ["Enter your", "ticket number."], lead: "You will find the number on your ticket or invitation.", label: "Ticket number", placeholder: "E.g. FW-0001", next: "Continue →", checking: "Checking…" },
-    role: { step: "Step 2", title: ["Choose a", "role."], lead: "We show only free roles. After you choose, the role is linked to your ticket.", choose: "Choose →", free: (n: number) => `Free: ${n}`, allTaken: "All roles are taken right now. Write to us and we will help.", back: "← Change ticket" },
-    contacts: { step: "Step 3", title: ["Your", "contacts."], roleLabel: "Role:", lead: "After saving, it cannot be changed.", first: "First name", last: "Last name", email: "E-mail", phone: "Phone", consentBefore: "I agree to the processing of ", consentLink: "personal data", consentAfter: ".", save: "Save choice →", saving: "Saving…", back: "← Back to roles" },
-    done: { eyebrow: "Done", title: ["Your role", "is set."], lead: (title: string) => `You chose the role “${title}”. Before the evening we will contact you by e-mail or phone.`, mailSent: (email: string) => `The role e-mail was sent to ${email}.`, mailNotSent: "The role e-mail has not been sent yet. You can sign in to the guest area at /guest with this e-mail.", again: "Choose another role" },
-    errors: { INVALID_TICKET: "Enter a valid ticket number.", TICKET_NOT_FOUND: "Ticket number not found.", EVENT_INACTIVE: "The event is not active right now.", ROLE_TAKEN: "This role is already taken. Choose another one.", TICKET_CLAIMED: "This ticket has already chosen a role.", NAME_REQUIRED: "Enter your first and last name.", EMAIL_INVALID: "Enter a valid e-mail.", PHONE_INVALID: "Enter a valid phone number.", MISSING_FIELDS: "The ticket or role is missing.", LOOKUP_FAILED: "Could not check the ticket. Please try again.", SAVE_FAILED: "Could not save your choice. Please try again." },
+    ticketEyebrow: "Step 1",
+    ticketTitle: "Enter your",
+    ticketAccent: "ticket number.",
+    ticketLead: "You will find the number on your ticket or invitation.",
+    ticketLabel: "Ticket number",
+    ticketPlaceholder: "E.g., FW-0001",
+    continue: "Continue →",
+    checking: "Checking…",
+    roleEyebrow: "Step 2",
+    roleTitle: "Choose your",
+    roleAccent: "role.",
+    roleLead: "We show only free roles. Once you choose, the role is linked to your ticket.",
+    chooseRole: "Choose →",
+    noRoles: "All roles are taken right now. Write to us and we will help.",
+    changeTicket: "← Change ticket",
+    contactsEyebrow: "Step 3",
+    contactsTitle: "Your",
+    contactsAccent: "contact details.",
+    rolePrefix: "Role: ",
+    roleSuffix: ". Once saved, it cannot be changed.",
+    firstName: "First name",
+    lastName: "Last name",
+    email: "Email",
+    phone: "Phone",
+    consent: "I agree to the processing of my personal data.",
+    save: "Save my choice →",
+    saving: "Saving…",
+    backToRoles: "← Back to roles",
+    doneEyebrow: "Done",
+    doneTitle: "The role is",
+    doneAccent: "yours.",
+    doneLead: (role: string) => `You chose the role “${role}”. We will contact you by email or phone before the evening.`,
+    backHome: "Back to home",
+    errors: {
+      lookup: "Could not check the ticket.",
+      save: "Could not save your choice. Please try again.",
+      invalidTicket: "Enter a valid ticket number.",
+      ticketNotFound: "Ticket number not found.",
+      eventInactive: "The event is not active right now.",
+      roleTaken: "This role is already taken. Choose another one.",
+      ticketClaimed: "This ticket has already chosen a role.",
+    },
   },
-};
+} satisfies Record<Locale, unknown>;
 
-// Одинаковые роли показываем одной карточкой; выбор берёт первую свободную роль группы.
-function groupRoles(roles: Role[]) {
-  const groups: RoleGroup[] = [];
-  for (const role of roles) {
-    const key = `${role.title}|${role.description}`;
-    const group = groups.find((item) => item.key === key);
-    if (group) group.roles.push(role);
-    else groups.push({ key, title: role.title, description: role.description, roles: [role] });
-  }
-  return groups;
+async function readError(response: Response) {
+  const body = (await response.json().catch(() => ({}))) as { error?: string; code?: string };
+  return body;
 }
 
 export function ChooseRole() {
   const { locale } = useI18n();
-  const t = copy[locale] ?? copy.ru;
-  const errorText = (code: string, fallback: string) => (t.errors as Record<string, string>)[code] ?? fallback;
+  const c = copy[locale];
   const [step, setStep] = useState<Step>("ticket");
   const [number, setNumber] = useState("");
   const [roles, setRoles] = useState<Role[]>([]);
@@ -64,19 +162,33 @@ export function ChooseRole() {
   const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [claimed, setClaimed] = useState<{ title: string; description: string; email: string; emailSent: boolean }>();
+  const [claimedTitle, setClaimedTitle] = useState("");
+  const [isInvitationOpen, setIsInvitationOpen] = useState(false);
 
-  // Возвращает список свободных ролей или код ошибки от сервера.
-  async function fetchRoles(ticket: string): Promise<{ roles: Role[] } | { code: string }> {
+  // Сообщения об ошибках приходят с кодом, поэтому выводим их на языке страницы.
+  function errorMessage(code: string | undefined, fallback: string) {
+    const known: Record<string, string> = {
+      INVALID_TICKET: c.errors.invalidTicket,
+      TICKET_NOT_FOUND: c.errors.ticketNotFound,
+      EVENT_INACTIVE: c.errors.eventInactive,
+      ROLE_TAKEN: c.errors.roleTaken,
+      TICKET_CLAIMED: c.errors.ticketClaimed,
+    };
+    return (code && known[code]) || fallback;
+  }
+
+  async function fetchRoles(ticket: string) {
     const response = await fetch("/api/tickets/lookup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ number: ticket }),
     });
-    const body = (await response.json().catch(() => ({}))) as { roles?: ServerRole[]; code?: string };
-    if (!response.ok) return { code: body.code ?? "LOOKUP_FAILED" };
-    // Название и описание берём на языке сайта; если перевода нет, остаётся русский текст роли.
-    return { roles: (body.roles ?? []).map((role) => localizeRole(role, locale)) };
+    if (!response.ok) {
+      const body = await readError(response);
+      throw Object.assign(new Error(body.code ?? "LOOKUP_FAILED"), { code: body.code });
+    }
+    const body = (await response.json()) as { roles: Role[] };
+    return body.roles;
   }
 
   async function submitTicket(event: FormEvent<HTMLFormElement>) {
@@ -84,14 +196,11 @@ export function ChooseRole() {
     setError("");
     setLoading(true);
     try {
-      const result = await fetchRoles(number);
-      if ("code" in result) setError(errorText(result.code, t.errors.LOOKUP_FAILED));
-      else {
-        setRoles(result.roles);
-        setStep("role");
-      }
-    } catch {
-      setError(t.errors.LOOKUP_FAILED);
+      setRoles(await fetchRoles(number));
+      setStep("role");
+    } catch (caught) {
+      const code = (caught as { code?: string }).code;
+      setError(errorMessage(code, c.errors.lookup));
     } finally {
       setLoading(false);
     }
@@ -115,7 +224,6 @@ export function ChooseRole() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           number,
-          locale,
           roleId: selectedRole.id,
           firstName: String(form.get("firstName") ?? ""),
           lastName: String(form.get("lastName") ?? ""),
@@ -124,47 +232,43 @@ export function ChooseRole() {
         }),
       });
       if (!response.ok) {
-        const body = (await response.json().catch(() => ({}))) as { code?: string };
-        setError(errorText(body.code ?? "SAVE_FAILED", t.errors.SAVE_FAILED));
-        // Роль уже занята: обновляем список, чтобы гость выбрал другую.
+        const body = await readError(response);
+        setError(errorMessage(body.code, c.errors.save));
+        // Loma ir aizņemta: pārlādējam sarakstu, lai viesis izvēlētos citu.
         if (body.code === "ROLE_TAKEN") {
           setSelectedRole(undefined);
-          const refreshed = await fetchRoles(number);
-          setRoles("roles" in refreshed ? refreshed.roles : []);
+          setRoles(await fetchRoles(number).catch(() => []));
           setStep("role");
         }
         return;
       }
-      const body = (await response.json()) as { roleTitle: string; roleDescription?: string; emailSent?: boolean };
-      setClaimed({ title: body.roleTitle || selectedRole.title, description: body.roleDescription ?? "", email: String(form.get("email") ?? ""), emailSent: Boolean(body.emailSent) });
+      setClaimedTitle(localizeRole(selectedRole, locale).title);
       setStep("done");
     } catch {
-      setError(t.errors.SAVE_FAILED);
+      setError(c.errors.save);
     } finally {
       setLoading(false);
     }
   }
 
-  const groups = groupRoles(roles);
-
   return (
     <main className="fw fwChoose">
-      <Header onReserve={() => { window.location.href = "/"; }} homeHref="/" />
+      <Header onReserve={() => setIsInvitationOpen(true)} homeHref="/" />
       <div className="fwWrap fwChooseWrap">
 
         {step === "ticket" && (
           <section className="fwChoosePanel">
-            <p className="fwEyebrowLight">{t.ticket.step}</p>
-            <h1 className="fwChooseTitle">{t.ticket.title[0]} <em>{t.ticket.title[1]}</em></h1>
-            <p className="fwChooseLead">{t.ticket.lead}</p>
+            <p className="fwEyebrowLight">{c.ticketEyebrow}</p>
+            <h1 className="fwChooseTitle">{c.ticketTitle} <em>{c.ticketAccent}</em></h1>
+            <p className="fwChooseLead">{c.ticketLead}</p>
             <form className="fwChooseForm" onSubmit={submitTicket}>
               <label>
-                {t.ticket.label}
+                {c.ticketLabel}
                 <input
                   name="number"
                   value={number}
                   onChange={(event) => setNumber(event.target.value)}
-                  placeholder={t.ticket.placeholder}
+                  placeholder={c.ticketPlaceholder}
                   autoComplete="off"
                   required
                   autoFocus
@@ -172,7 +276,7 @@ export function ChooseRole() {
               </label>
               {error && <p className="fwChooseError" role="alert">{error}</p>}
               <button className="fwBtnGold" disabled={loading || !number.trim()}>
-                {loading ? t.ticket.checking : t.ticket.next}
+                {loading ? c.checking : c.continue}
               </button>
             </form>
           </section>
@@ -180,101 +284,84 @@ export function ChooseRole() {
 
         {step === "role" && (
           <section className="fwChoosePanel">
-            <button type="button" className="fwChooseBackBtn" onClick={() => { setError(""); setStep("ticket"); }}>
-              {t.role.back}
-            </button>
-            <p className="fwEyebrowLight">{t.role.step}</p>
-            <h1 className="fwChooseTitle">{t.role.title[0]} <em>{t.role.title[1]}</em></h1>
-            <p className="fwChooseLead">{t.role.lead}</p>
+            <p className="fwEyebrowLight">{c.roleEyebrow}</p>
+            <h1 className="fwChooseTitle">{c.roleTitle} <em>{c.roleAccent}</em></h1>
+            <p className="fwChooseLead">{c.roleLead}</p>
             {error && <p className="fwChooseError" role="alert">{error}</p>}
-            {groups.length ? (
+            {roles.length ? (
               <ul className="fwChooseRoles">
-                {groups.map((group) => (
-                  <li key={group.key}>
-                    <button
-                      type="button"
-                      className={group.roles.length > 1 ? "fwChooseRoleStacked" : undefined}
-                      onClick={() => pickRole(group.roles[0])}
-                    >
-                      <strong>{group.title}</strong>
-                      {group.description && <span>{group.description}</span>}
-                      <em>{t.role.choose}</em>
-                      {group.roles.length > 1 && <b className="fwChooseCount">{t.role.free(group.roles.length)}</b>}
-                    </button>
-                  </li>
-                ))}
+                {roles.map((role) => {
+                  const text = localizeRole(role, locale);
+                  return (
+                    <li key={role.id}>
+                      <button type="button" onClick={() => pickRole(role)}>
+                        <strong>{text.title}</strong>
+                        {text.description && <span>{text.description}</span>}
+                        <em>{c.chooseRole}</em>
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
-              <p className="fwChooseLead">{t.role.allTaken}</p>
+              <p className="fwChooseLead">{c.noRoles}</p>
             )}
+            <button type="button" className="fwChooseBackBtn" onClick={() => { setError(""); setStep("ticket"); }}>
+              {c.changeTicket}
+            </button>
           </section>
         )}
 
         {step === "contacts" && selectedRole && (
           <section className="fwChoosePanel">
-            <button type="button" className="fwChooseBackBtn" onClick={() => { setError(""); setStep("role"); }}>
-              {t.contacts.back}
-            </button>
-            <p className="fwEyebrowLight">{t.contacts.step}</p>
-            <h1 className="fwChooseTitle">{t.contacts.title[0]} <em>{t.contacts.title[1]}</em></h1>
-            <p className="fwChooseLead">{t.contacts.roleLabel} <strong>{selectedRole.title}</strong>. {t.contacts.lead}</p>
+            <p className="fwEyebrowLight">{c.contactsEyebrow}</p>
+            <h1 className="fwChooseTitle">{c.contactsTitle} <em>{c.contactsAccent}</em></h1>
+            <p className="fwChooseLead">{c.rolePrefix}<strong>{localizeRole(selectedRole, locale).title}</strong>{c.roleSuffix}</p>
             <form className="fwChooseForm" onSubmit={submitContacts}>
               <div className="fwChooseRow">
                 <label>
-                  {t.contacts.first}
+                  {c.firstName}
                   <input name="firstName" required autoComplete="given-name" />
                 </label>
                 <label>
-                  {t.contacts.last}
+                  {c.lastName}
                   <input name="lastName" required autoComplete="family-name" />
                 </label>
               </div>
               <label>
-                {t.contacts.email}
+                {c.email}
                 <input name="email" type="email" required autoComplete="email" />
               </label>
               <label>
-                {t.contacts.phone}
+                {c.phone}
                 <input name="phone" type="tel" required autoComplete="tel" placeholder="+371" />
               </label>
               <label className="fwChooseConsent">
                 <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} required />
-                <span>{t.contacts.consentBefore}<a href="/privacy-policy" target="_blank" rel="noopener noreferrer">{t.contacts.consentLink}</a>{t.contacts.consentAfter}</span>
+                <span>{c.consent}</span>
               </label>
               {error && <p className="fwChooseError" role="alert">{error}</p>}
               <button className="fwBtnGold" disabled={loading || !consent}>
-                {loading ? t.contacts.saving : t.contacts.save}
+                {loading ? c.saving : c.save}
               </button>
             </form>
+            <button type="button" className="fwChooseBackBtn" onClick={() => { setError(""); setStep("role"); }}>
+              {c.backToRoles}
+            </button>
           </section>
         )}
 
         {step === "done" && (
           <section className="fwChoosePanel fwChooseDone">
-            <p className="fwEyebrowLight">{t.done.eyebrow}</p>
-            <h1 className="fwChooseTitle">{t.done.title[0]} <em>{t.done.title[1]}</em></h1>
-            <p className="fwChooseLead">{t.done.lead(claimed?.title ?? "")}</p>
-            {claimed?.description && <p className="fwChooseLead">{claimed.description}</p>}
-            <p className="fwChooseLead">
-              {claimed?.emailSent ? t.done.mailSent(claimed.email) : t.done.mailNotSent}
-            </p>
-            <button
-              type="button"
-              className="fwBtnGold"
-              onClick={() => {
-                setError("");
-                setNumber("");
-                setSelectedRole(undefined);
-                setClaimed(undefined);
-                setConsent(false);
-                setStep("ticket");
-              }}
-            >
-              {t.done.again}
-            </button>
+            <p className="fwEyebrowLight">{c.doneEyebrow}</p>
+            <h1 className="fwChooseTitle">{c.doneTitle} <em>{c.doneAccent}</em></h1>
+            <p className="fwChooseLead">{c.doneLead(claimedTitle)}</p>
+            <a className="fwBtnGold" href="/">{c.backHome}</a>
           </section>
         )}
       </div>
+
+      {isInvitationOpen && <InvitationModal onClose={() => setIsInvitationOpen(false)} />}
     </main>
   );
 }
