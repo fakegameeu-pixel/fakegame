@@ -11,6 +11,8 @@
 
   .fwNext {
     border-radius: 20px;
+    /* Тень карточки на телефоне затемняла верх блока FAQ под ней. */
+    box-shadow: none;
   }
 
   .fwNextLeft,

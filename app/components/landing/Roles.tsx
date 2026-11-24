@@ -7,6 +7,7 @@ import "./RoleStack.css";
 export function Roles() {
   const { locale } = useI18n();
   const c = landingCopy[locale].roles;
+
   return (
     <section className="fwRoles" id="roles">
       <div className="fwWrap fwRolesGrid">
@@ -18,19 +19,23 @@ export function Roles() {
           <p className="fwLead">{c.lead}</p>
         </div>
         <div className="fwRoleStack" aria-hidden="true">
-          {roleMeta.map((meta, i) => (
-            <div
-              key={c.items[i].tag}
-              className={`fwRoleCard fwRoleCard--${meta.tone}`}
-              style={{ "--rot": meta.rot, "--left": meta.left } as CSSProperties}
-            >
-              <span className="fwRoleTag">{c.items[i].tag}</span>
-              <p className="fwRoleTitle">{c.items[i].title}</p>
-              <span className="fwRoleSecret">
-                {c.secret} {c.items[i].secret}
-              </span>
-            </div>
-          ))}
+          {c.items.map((r, i) => {
+            const meta = roleMeta[i];
+            if (!meta) return null;
+            return (
+              <div
+                key={r.tag}
+                className={`fwRoleCard fwRoleCard--${meta.tone}`}
+                style={{ "--rot": meta.rot, "--left": meta.left } as CSSProperties}
+              >
+                <span className="fwRoleTag">{r.tag}</span>
+                <p className="fwRoleTitle">{r.title}</p>
+                <span className="fwRoleSecret">
+                  {c.secret} {r.secret}
+                </span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

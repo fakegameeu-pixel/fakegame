@@ -17,11 +17,14 @@ export async function POST(request: Request) {
     if (!eventId) return NextResponse.json({ error: "Мероприятие сейчас не активно.", code: "EVENT_INACTIVE" }, { status: 404 });
 
     const eventRef = adminDb.collection("events").doc(eventId);
-    const ticket = await eventRef.collection("tickets").doc(ticketNumber).get();
+    // Билет и роли читаем параллельно: раньше они шли друг за другом и гость ждал две поездки к базе.
+    const [ticket, roles] = await Promise.all([
+      eventRef.collection("tickets").doc(ticketNumber).get(),
+      eventRef.collection("roles").get(),
+    ]);
     if (!ticket.exists) return NextResponse.json({ error: "Номер билета не найден.", code: "TICKET_NOT_FOUND" }, { status: 404 });
     if (ticket.data()?.status === "claimed") return NextResponse.json({ error: "Номер билета не найден.", code: "TICKET_NOT_FOUND" }, { status: 404 });
 
-    const roles = await eventRef.collection("roles").get();
     const freeRoles = roles.docs
       .filter((role) => isFreeRole(role.data()))
       .map((role) => ({
